@@ -29,7 +29,7 @@ public class RegistrationController {
     }
 
     @GetMapping("confirm")
-    private ResponseEntity confirm(@RequestParam String secret) {
+    public ResponseEntity confirm(@RequestParam String secret) {
         User user = userService.confirm(secret);
         UserResponseDto response = UserResponseDto.toUserResponseDto(user);
         return ResponseEntity.ok(response);

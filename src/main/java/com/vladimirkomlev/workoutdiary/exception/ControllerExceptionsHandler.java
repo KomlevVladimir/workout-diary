@@ -62,4 +62,16 @@ public class ControllerExceptionsHandler {
         return ResponseEntity.status(BAD_REQUEST).body(new Error<>(INVALID_CONTENT, "Data is invalid"));
     }
 
+    @ExceptionHandler
+    public ResponseEntity<?> handle(IllegalStateException exception) {
+        logger.error(exception.getMessage());
+        return ResponseEntity.status(BAD_REQUEST).body(new Error<>(INVALID_CONTENT, "Data state is invalid"));
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<?> handle(IllegalArgumentException exception) {
+        logger.error(exception.getMessage());
+        return ResponseEntity.status(BAD_REQUEST).body(new Error<>(INVALID_CONTENT, "Data is invalid"));
+    }
+
 }

@@ -23,4 +23,9 @@ public class SecretLinkServiceImpl implements SecretLinkService {
     public String generateConfirmationEmailLink(String secret) {
         return generateLink("/confirm?secret=", secret);
     }
+
+    @Override
+    public String generatePasswordLink(String secret) {
+        return generateLink("/reset?secret=", secret);
+    }
 }

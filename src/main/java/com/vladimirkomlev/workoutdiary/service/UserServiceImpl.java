@@ -1,5 +1,7 @@
 package com.vladimirkomlev.workoutdiary.service;
 
+import com.vladimirkomlev.workoutdiary.dto.ResetPasswordRequestDto;
+import com.vladimirkomlev.workoutdiary.dto.SetupPasswordRequestDto;
 import com.vladimirkomlev.workoutdiary.infra.email.EmailMessage;
 import com.vladimirkomlev.workoutdiary.infra.email.EmailSender;
 import com.vladimirkomlev.workoutdiary.model.ConfirmationSecret;
@@ -7,18 +9,10 @@ import com.vladimirkomlev.workoutdiary.model.User;
 import com.vladimirkomlev.workoutdiary.repository.ConfirmationSecretRepository;
 import com.vladimirkomlev.workoutdiary.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.servlet.ServletContext;
 import java.util.List;
-
-import static org.springframework.web.util.UriComponentsBuilder.fromHttpUrl;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -79,6 +73,37 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new IllegalStateException("Secret not found");
         }
+    }
+
+    @Override
+    public void resetPassword(ResetPasswordRequestDto resetPasswordRequestDto) {
+        User user = userRepository.findByEmailIgnoreCase(resetPasswordRequestDto.getEmail());
+        if (user != null) {
+            ConfirmationSecret confirmationSecret = new ConfirmationSecret(user);
+            confirmationSecretRepository.save(confirmationSecret);
+            EmailMessage message = new EmailMessage();
+            message.setRecipient(user.getEmail());
+            message.setSubject("Reset password");
+            String link = secretLinkService.generatePasswordLink(confirmationSecret.getSecret());
+            message.setMessage(link);
+            emailSender.sendEmail(message);
+        } else {
+            throw new IllegalStateException("User not found");
+        }
+    }
+
+    @Override
+    public void setupPassword(SetupPasswordRequestDto setupPasswordRequestDto) {
+        ConfirmationSecret confirmationSecret = confirmationSecretRepository.findBySecret(setupPasswordRequestDto.getSecret());
+        if (confirmationSecret != null) {
+            User user = userRepository.findByEmailIgnoreCase(confirmationSecret.getUser().getEmail());
+            user.setPassword(passwordEncoder.encode(setupPasswordRequestDto.getPassword()));
+            confirmationSecretRepository.delete(confirmationSecret);
+            userRepository.save(user);
+        } else {
+            throw new IllegalStateException("Secret not found");
+        }
+
     }
 
     @Override
