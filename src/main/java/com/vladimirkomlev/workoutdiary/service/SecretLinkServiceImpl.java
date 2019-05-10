@@ -1,7 +1,5 @@
 package com.vladimirkomlev.workoutdiary.service;
 
-import com.vladimirkomlev.workoutdiary.model.ConfirmationSecret;
-import com.vladimirkomlev.workoutdiary.model.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
