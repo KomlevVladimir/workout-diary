@@ -6,10 +6,7 @@ import com.vladimirkomlev.workoutdiary.model.User;
 import com.vladimirkomlev.workoutdiary.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -27,6 +24,13 @@ public class RegistrationController {
     public ResponseEntity signUp(@Valid @RequestBody UserRequestDto userRequestDto) {
         User user = UserRequestDto.toUser(userRequestDto);
         userService.register(user);
+        UserResponseDto response = UserResponseDto.toUserResponseDto(user);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("confirm")
+    private ResponseEntity confirm(@RequestParam String secret) {
+        User user = userService.confirm(secret);
         UserResponseDto response = UserResponseDto.toUserResponseDto(user);
         return ResponseEntity.ok(response);
     }

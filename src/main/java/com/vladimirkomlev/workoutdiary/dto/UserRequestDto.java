@@ -2,6 +2,7 @@ package com.vladimirkomlev.workoutdiary.dto;
 
 import com.vladimirkomlev.workoutdiary.model.User;
 import com.vladimirkomlev.workoutdiary.validation.Age;
+import com.vladimirkomlev.workoutdiary.validation.EmailField;
 import com.vladimirkomlev.workoutdiary.validation.NotBlankField;
 import com.vladimirkomlev.workoutdiary.validation.Password;
 
@@ -14,9 +15,8 @@ public class UserRequestDto {
     private String lastName;
     @Age
     private Integer age;
-    @Email
+    @EmailField
     private String email;
-    @NotBlankField
     @Password
     private String password;
 

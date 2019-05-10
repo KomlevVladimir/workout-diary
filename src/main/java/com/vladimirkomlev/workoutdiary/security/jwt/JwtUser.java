@@ -12,6 +12,7 @@ public class JwtUser implements UserDetails {
     private final int age;
     private final String email;
     private final String password;
+    private final boolean isEnabled;
 
     public JwtUser(
             Long id,
@@ -19,7 +20,8 @@ public class JwtUser implements UserDetails {
             String lastName,
             int age,
             String email,
-            String password
+            String password,
+            boolean isEnabled
     ) {
         this.id = id;
         this.firstName = firstName;
@@ -27,6 +29,7 @@ public class JwtUser implements UserDetails {
         this.age = age;
         this.email = email;
         this.password = password;
+        this.isEnabled = isEnabled;
     }
 
     public Long getId() {
@@ -65,7 +68,7 @@ public class JwtUser implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return isEnabled;
     }
 
     public String getFirstName() {

@@ -8,6 +8,10 @@ public interface UserService {
 
     User register(User user);
 
+    void verifyEmail(User user);
+
+    User confirm(String secret);
+
     List<User> getAll();
 
     User findByEmailIgnoreCase(String email);

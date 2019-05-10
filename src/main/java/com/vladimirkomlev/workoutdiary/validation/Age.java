@@ -10,8 +10,8 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@NotNull
-@Digits(integer=3, fraction=0, message = "Не более 3-х знаков")
+@NotNull(message = "should not be null")
+@Digits(integer=3, fraction=0, message = "no more than 3 digits")
 @Constraint(validatedBy = {})
 @Target(FIELD)
 @Retention(RUNTIME)
