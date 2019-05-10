@@ -63,9 +63,9 @@ public class ControllerExceptionsHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<?> handle(IllegalStateException exception) {
+    public ResponseEntity<?> handle(UserNotFoundException exception) {
         logger.error(exception.getMessage());
-        return ResponseEntity.status(BAD_REQUEST).body(new Error<>(INVALID_CONTENT, "Data state is invalid"));
+        return ResponseEntity.status(BAD_REQUEST).body(new Error<>(INVALID_CONTENT, "Data is invalid"));
     }
 
     @ExceptionHandler

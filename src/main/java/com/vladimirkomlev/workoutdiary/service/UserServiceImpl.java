@@ -2,6 +2,7 @@ package com.vladimirkomlev.workoutdiary.service;
 
 import com.vladimirkomlev.workoutdiary.dto.ResetPasswordRequestDto;
 import com.vladimirkomlev.workoutdiary.dto.SetupPasswordRequestDto;
+import com.vladimirkomlev.workoutdiary.exception.UserNotFoundException;
 import com.vladimirkomlev.workoutdiary.infra.email.EmailMessage;
 import com.vladimirkomlev.workoutdiary.infra.email.EmailSender;
 import com.vladimirkomlev.workoutdiary.model.ConfirmationSecret;
@@ -58,7 +59,7 @@ public class UserServiceImpl implements UserService {
             message.setMessage(link);
             emailSender.sendEmail(message);
         } else {
-            throw new IllegalStateException("User is not created");
+            throw new UserNotFoundException("User is not created");
         }
     }
 
@@ -71,7 +72,7 @@ public class UserServiceImpl implements UserService {
             confirmationSecretRepository.delete(confirmationSecret);
             return userRepository.save(user);
         } else {
-            throw new IllegalStateException("Secret not found");
+            throw new IllegalArgumentException("Secret not found");
         }
     }
 
@@ -88,7 +89,7 @@ public class UserServiceImpl implements UserService {
             message.setMessage(link);
             emailSender.sendEmail(message);
         } else {
-            throw new IllegalStateException("User not found");
+            throw new UserNotFoundException("User not found");
         }
     }
 
@@ -101,7 +102,7 @@ public class UserServiceImpl implements UserService {
             confirmationSecretRepository.delete(confirmationSecret);
             userRepository.save(user);
         } else {
-            throw new IllegalStateException("Secret not found");
+            throw new IllegalArgumentException("Secret not found");
         }
 
     }

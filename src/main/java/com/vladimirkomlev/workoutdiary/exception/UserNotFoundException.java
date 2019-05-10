@@ -1,4 +1,12 @@
 package com.vladimirkomlev.workoutdiary.exception;
 
-public class UserNotFoundException {
+public class UserNotFoundException extends RuntimeException {
+
+    public UserNotFoundException(String msg, Throwable t) {
+        super(msg, t);
+    }
+
+    public UserNotFoundException(String msg) {
+        super(msg);
+    }
 }
