@@ -4,7 +4,7 @@ import com.vladimirkomlev.workoutdiary.dto.ResetPasswordRequestDto;
 import com.vladimirkomlev.workoutdiary.dto.SetupPasswordRequestDto;
 import com.vladimirkomlev.workoutdiary.exception.UserNotFoundException;
 import com.vladimirkomlev.workoutdiary.infra.email.EmailMessage;
-import com.vladimirkomlev.workoutdiary.infra.email.EmailSender;
+import com.vladimirkomlev.workoutdiary.infra.messaging.MessageQueues;
 import com.vladimirkomlev.workoutdiary.model.ConfirmationSecret;
 import com.vladimirkomlev.workoutdiary.model.User;
 import com.vladimirkomlev.workoutdiary.repository.ConfirmationSecretRepository;
@@ -19,7 +19,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
-    private final EmailSender emailSender;
+    private final MessageQueues messageQueues;
     private final ConfirmationSecretRepository confirmationSecretRepository;
     private final SecretLinkService secretLinkService;
 
@@ -27,13 +27,13 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl(
             UserRepository userRepository,
             BCryptPasswordEncoder passwordEncoder,
-            EmailSender emailSender,
+            MessageQueues messageQueues,
             ConfirmationSecretRepository confirmationSecretRepository,
             SecretLinkService secretLinkService
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.emailSender = emailSender;
+        this.messageQueues = messageQueues;
         this.confirmationSecretRepository = confirmationSecretRepository;
         this.secretLinkService = secretLinkService;
     }
@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
             message.setSubject("Confirm your account");
             String link = secretLinkService.generateConfirmationEmailLink(confirmationSecret.getSecret());
             message.setMessage(link);
-            emailSender.sendEmail(message);
+            messageQueues.enqueueEmail(message);
         } else {
             throw new UserNotFoundException("User is not created");
         }
@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService {
             message.setSubject("Reset password");
             String link = secretLinkService.generatePasswordLink(confirmationSecret.getSecret());
             message.setMessage(link);
-            emailSender.sendEmail(message);
+            messageQueues.enqueueEmail(message);
         } else {
             throw new UserNotFoundException("User not found");
         }

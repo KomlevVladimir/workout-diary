@@ -8,3 +8,9 @@ services:
     - POSTGRES_PASSWORD=Password1!
     ports:
     - 5432:5432
+  rabbitmq:
+    image: "rabbitmq:management"
+    hostname: "rabbit"
+    ports:
+    - 5672:5672
+    - 15672:15672
