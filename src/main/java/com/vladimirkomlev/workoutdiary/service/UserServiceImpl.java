@@ -2,7 +2,7 @@ package com.vladimirkomlev.workoutdiary.service;
 
 import com.vladimirkomlev.workoutdiary.dto.ResetPasswordRequestDto;
 import com.vladimirkomlev.workoutdiary.dto.SetupPasswordRequestDto;
-import com.vladimirkomlev.workoutdiary.exception.UserNotFoundException;
+import com.vladimirkomlev.workoutdiary.exception.NotFoundException;
 import com.vladimirkomlev.workoutdiary.infra.email.EmailMessage;
 import com.vladimirkomlev.workoutdiary.infra.messaging.MessageQueues;
 import com.vladimirkomlev.workoutdiary.model.ConfirmationSecret;
@@ -10,6 +10,8 @@ import com.vladimirkomlev.workoutdiary.model.User;
 import com.vladimirkomlev.workoutdiary.repository.ConfirmationSecretRepository;
 import com.vladimirkomlev.workoutdiary.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -59,7 +61,7 @@ public class UserServiceImpl implements UserService {
             message.setMessage(link);
             messageQueues.enqueueEmail(message);
         } else {
-            throw new UserNotFoundException("User is not created");
+            throw new NotFoundException("User is not created");
         }
     }
 
@@ -72,7 +74,7 @@ public class UserServiceImpl implements UserService {
             confirmationSecretRepository.delete(confirmationSecret);
             return userRepository.save(user);
         } else {
-            throw new IllegalArgumentException("Secret not found");
+            throw new NotFoundException("Secret not found");
         }
     }
 
@@ -89,7 +91,7 @@ public class UserServiceImpl implements UserService {
             message.setMessage(link);
             messageQueues.enqueueEmail(message);
         } else {
-            throw new UserNotFoundException("User not found");
+            throw new NotFoundException("User not found");
         }
     }
 
@@ -102,7 +104,7 @@ public class UserServiceImpl implements UserService {
             confirmationSecretRepository.delete(confirmationSecret);
             userRepository.save(user);
         } else {
-            throw new IllegalArgumentException("Secret not found");
+            throw new NotFoundException("Secret not found");
         }
 
     }
@@ -119,6 +121,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findById(Long id) {
-        return userRepository.findById(id).orElse(null);
+        return userRepository.findById(id).orElseThrow(() -> new NotFoundException("Workout not found"));
+    }
+
+    @Override
+    public User getCurrentUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = ((UserDetails) principal).getUsername();
+        return findByEmailIgnoreCase(email);
     }
 }

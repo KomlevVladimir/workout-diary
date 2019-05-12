@@ -1,6 +1,8 @@
 package com.vladimirkomlev.workoutdiary.model;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -20,6 +22,8 @@ public class User {
     private String password;
     @Column(name = "is_enabled")
     private boolean isEnabled;
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private Set<Workout> workouts = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -75,5 +79,13 @@ public class User {
 
     public void setEnabled(boolean enabled) {
         isEnabled = enabled;
+    }
+
+    public Set<Workout> getWorkouts() {
+        return workouts;
+    }
+
+    public void setWorkouts(Set<Workout> workouts) {
+        this.workouts = workouts;
     }
 }

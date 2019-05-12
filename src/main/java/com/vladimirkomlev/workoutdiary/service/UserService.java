@@ -23,4 +23,6 @@ public interface UserService {
     User findByEmailIgnoreCase(String email);
 
     User findById(Long id);
+
+    User getCurrentUser();
 }

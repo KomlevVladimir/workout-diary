@@ -11,7 +11,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,35 +20,34 @@ import static org.springframework.http.HttpStatus.*;
 @ControllerAdvice
 @Order(1)
 public class ControllerExceptionsHandler {
-
     private static Logger logger = LoggerFactory.getLogger(ControllerExceptionsHandler.class);
 
     @ExceptionHandler
-    public ResponseEntity<?> handle(BadCredentialsException exception) {
+    public ResponseEntity handle(BadCredentialsException exception) {
         logger.error(exception.getMessage());
         return ResponseEntity.status(UNAUTHORIZED).body(new Error<>(INVALID_CREDENTIALS, exception.getMessage()));
     }
 
-    @ExceptionHandler
-    public ResponseEntity<?> handle(JwtAuthenticationException exception) {
-        logger.error(exception.getMessage());
-        return ResponseEntity.status(UNAUTHORIZED).body(new Error<>(UNAUTHENTICATED, exception.getMessage()));
-    }
+//    @ExceptionHandler
+//    public ResponseEntity handle(JwtAuthenticationException exception) {
+//        logger.error(exception.getMessage());
+//        return ResponseEntity.status(UNAUTHORIZED).body(new Error<>(UNAUTHENTICATED, exception.getMessage()));
+//    }
+//
+//    @ExceptionHandler(AccessDeniedException.class)
+//    public ResponseEntity handle(AccessDeniedException exception) {
+//        logger.error(exception.getMessage());
+//        return ResponseEntity.status(FORBIDDEN).body(new Error<>(ACCESS_DENIED, exception.getClass().getName()));
+//    }
 
-    @ExceptionHandler({AccessDeniedException.class, InvalidTokenException.class})
-    public ResponseEntity<?> handle(Exception exception) {
-        logger.error(exception.getMessage());
-        return ResponseEntity.status(FORBIDDEN).body(new Error<>(ACCESS_DENIED, exception.getClass().getName()));
-    }
-
     @ExceptionHandler
-    public ResponseEntity<?> handle(ConstraintViolationException exception) {
+    public ResponseEntity handle(ConstraintViolationException exception) {
         String error = exception.getSQLException().getMessage().split("Подробности: ")[1];
         return ResponseEntity.status(CONFLICT).body(new Error<>(INVALID_CONTENT, error));
     }
 
     @ExceptionHandler
-    public ResponseEntity<?> handle(MethodArgumentNotValidException exception) {
+    public ResponseEntity handle(MethodArgumentNotValidException exception) {
         List<String> errors = exception.getBindingResult().getFieldErrors().stream().map(
                 fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage()
         ).collect(Collectors.toList());
@@ -57,19 +55,19 @@ public class ControllerExceptionsHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<?> handle(HttpMessageNotReadableException exception) {
+    public ResponseEntity handle(HttpMessageNotReadableException exception) {
         logger.error(exception.getMessage());
         return ResponseEntity.status(BAD_REQUEST).body(new Error<>(INVALID_CONTENT, "Data is invalid"));
     }
 
     @ExceptionHandler
-    public ResponseEntity<?> handle(UserNotFoundException exception) {
+    public ResponseEntity handle(NotFoundException exception) {
         logger.error(exception.getMessage());
-        return ResponseEntity.status(BAD_REQUEST).body(new Error<>(INVALID_CONTENT, "Data is invalid"));
+        return ResponseEntity.status(NOT_FOUND).body(new Error<>(ENTITY_NOT_FOUND, exception.getMessage()));
     }
 
     @ExceptionHandler
-    public ResponseEntity<?> handle(IllegalArgumentException exception) {
+    public ResponseEntity handle(IllegalArgumentException exception) {
         logger.error(exception.getMessage());
         return ResponseEntity.status(BAD_REQUEST).body(new Error<>(INVALID_CONTENT, "Data is invalid"));
     }
