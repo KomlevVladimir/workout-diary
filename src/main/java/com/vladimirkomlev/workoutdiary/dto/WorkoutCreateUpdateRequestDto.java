@@ -6,10 +6,15 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 public class WorkoutCreateUpdateRequestDto {
-    @NotBlankField
+    @NotNull
     private LocalDate date;
     @NotBlankField
     private String description;
+
+    public WorkoutCreateUpdateRequestDto(@NotNull LocalDate date, String description) {
+        this.date = date;
+        this.description = description;
+    }
 
     public LocalDate getDate() {
         return date;

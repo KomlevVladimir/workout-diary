@@ -17,6 +17,17 @@ public class Workout {
     @JoinColumn(name = "user_id")
     private User user;
 
+    public Workout() {
+
+    }
+
+    public Workout(long id, LocalDate date, String description, User user) {
+        this.id = id;
+        this.date = date;
+        this.description = description;
+        this.user = user;
+    }
+
     public long getId() {
         return id;
     }
