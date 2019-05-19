@@ -45,6 +45,7 @@ public class WorkoutServiceTest {
         assertThat(workout.getDescription(), equalTo(description));
         assertThat(workout.getUser(), equalTo(currentUserMock));
         verify(userService, times(1)).getCurrentUser();
+        verify(workoutRepository, times(1)).save(any(Workout.class));
     }
 
     @Test
@@ -82,6 +83,7 @@ public class WorkoutServiceTest {
         assertThat(workout.getId(), equalTo(workoutId));
         assertThat(workout.getUser(), equalTo(currentUserMock));
         verify(userService, times(1)).getCurrentUser();
+        verify(workoutRepository, times(1)).findById(workoutId);
     }
 
     @Test
@@ -138,6 +140,7 @@ public class WorkoutServiceTest {
         assertThat(updatedWorkout.getUser(), equalTo(currentUserMock));
         verify(userService, times(1)).getCurrentUser();
         verify(workoutRepository, times(1)).findById(workoutId);
+        verify(workoutRepository, times(1)).save(any(Workout.class));
     }
 
     @Test
@@ -160,6 +163,7 @@ public class WorkoutServiceTest {
         exceptionRule.expect(AccessDeniedException.class);
         exceptionRule.expectMessage("Access denied");
         workoutService.update(request, 120L, workoutId);
+
     }
 
     @Test
@@ -191,6 +195,7 @@ public class WorkoutServiceTest {
 
         verify(userService, times(1)).getCurrentUser();
         verify(workoutRepository, times(1)).findById(workoutId);
+        verify(workoutRepository, times(1)).delete(any(Workout.class));
     }
 
     @Test
@@ -239,6 +244,8 @@ public class WorkoutServiceTest {
         assertThat(workouts.get(0).getDate(), equalTo(date));
         assertThat(workouts.get(0).getDescription(), equalTo(description));
         assertThat(workouts.get(0).getUser(), equalTo(currentUserMock));
+        verify(userService, times(1)).getCurrentUser();
+        verify(workoutRepository, times(1)).findAll();
     }
 
     @Test
