@@ -36,14 +36,11 @@ public class AuthController {
     }
 
     @PostMapping(value = "token")
-    public ResponseEntity login(@RequestBody AuthRequestDto request) {
+    public ResponseEntity getAuthToken(@RequestBody AuthRequestDto request) {
         try {
             String email = request.getEmail();
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, request.getPassword()));
-            User user = userService.findByEmailIgnoreCase(email);
-            if (user == null) {
-                throw new UsernameNotFoundException("User with email: " + email + " not found");
-            }
+            User user = userService.getUserByEmail(email);
             String token = jwtTokenProvider.createToken(user);
             AuthResponseDto response = new AuthResponseDto();
             response.setUserId(user.getId());

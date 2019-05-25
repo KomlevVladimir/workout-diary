@@ -20,7 +20,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userService.findByEmailIgnoreCase(email);
+        User user = userService.getUserByEmail(email);
         return JwtUserFactory.create(user);
     }
 }

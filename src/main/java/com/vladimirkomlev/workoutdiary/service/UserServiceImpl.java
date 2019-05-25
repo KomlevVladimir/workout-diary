@@ -12,6 +12,7 @@ import com.vladimirkomlev.workoutdiary.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -115,8 +116,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByEmailIgnoreCase(String email) {
-        return userRepository.findByEmailIgnoreCase(email);
+    public User getUserByEmail(String email) {
+        User user = userRepository.findByEmailIgnoreCase(email);
+        if (user == null) {
+            throw new UsernameNotFoundException("User with email: " + email + " not found");
+        }
+        return user;
     }
 
     @Override
@@ -128,6 +133,6 @@ public class UserServiceImpl implements UserService {
     public User getCurrentUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String email = ((UserDetails) principal).getUsername();
-        return findByEmailIgnoreCase(email);
+        return getUserByEmail(email);
     }
 }

@@ -20,7 +20,7 @@ public interface UserService {
 
     List<User> getAll();
 
-    User findByEmailIgnoreCase(String email);
+    User getUserByEmail(String email);
 
     User findById(Long id);
 
