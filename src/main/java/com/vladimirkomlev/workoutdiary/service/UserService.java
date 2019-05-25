@@ -18,11 +18,7 @@ public interface UserService {
 
     void setupPassword(SetupPasswordRequestDto setupPasswordRequestDto);
 
-    List<User> getAll();
-
     User getUserByEmail(String email);
-
-    User findById(Long id);
 
     User getCurrentUser();
 }
