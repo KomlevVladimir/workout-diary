@@ -1,5 +1,6 @@
 package com.vladimirkomlev.workoutdiary.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vladimirkomlev.workoutdiary.dto.ResetPasswordRequestDto;
 import com.vladimirkomlev.workoutdiary.dto.SetupPasswordRequestDto;
@@ -39,7 +40,17 @@ public class PasswordControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
         verify(userService, times(1)).resetPassword(any(ResetPasswordRequestDto.class));
+    }
 
+    @Test
+    public void resetPasswordWithBlankEmail() throws Exception {
+        ResetPasswordRequestDto request = new ResetPasswordRequestDto();
+
+        mockMvc.perform(post("/reset-password")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andReturn();
     }
 
     @Test
@@ -54,7 +65,29 @@ public class PasswordControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
         verify(userService, times(1)).setupPassword(any(SetupPasswordRequestDto.class));
+    }
 
+    @Test
+    public void setupPasswordWithBlankPassword() throws Exception {
+        SetupPasswordRequestDto request = new SetupPasswordRequestDto();
+        request.setSecret("secret");
 
+        mockMvc.perform(post("/setup-password")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+    }
+
+    @Test
+    public void setupPasswordWithBlankSecret() throws Exception {
+        SetupPasswordRequestDto request = new SetupPasswordRequestDto();
+        request.setPassword("Password!1");
+
+        mockMvc.perform(post("/setup-password")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andReturn();
     }
 }

@@ -16,6 +16,9 @@ public class WorkoutCreateUpdateRequestDto {
         this.description = description;
     }
 
+    public WorkoutCreateUpdateRequestDto() {
+    }
+
     public LocalDate getDate() {
         return date;
     }

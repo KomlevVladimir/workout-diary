@@ -1,5 +1,6 @@
 package com.vladimirkomlev.workoutdiary.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vladimirkomlev.workoutdiary.dto.UserRequestDto;
 import com.vladimirkomlev.workoutdiary.dto.UserResponseDto;
@@ -95,7 +96,7 @@ public class RegistrationControllerTest {
     }
 
     @Test
-    public void signUpWithoutFirstName() throws Exception {
+    public void signUpWithBlankFirstName() throws Exception {
         String lastName = "Doe";
         String email = "test@myemail.com";
         String password = "Password1!";
@@ -113,7 +114,7 @@ public class RegistrationControllerTest {
     }
 
     @Test
-    public void signUpWithoutLastName() throws Exception {
+    public void signUpWithBlankLastName() throws Exception {
         String firstName = "John";
         String email = "TEST@MyEmail.com";
         String password = "Password1!";
@@ -131,7 +132,7 @@ public class RegistrationControllerTest {
     }
 
     @Test
-    public void signUpWithoutEmail() throws Exception {
+    public void signUpWithBlankEmail() throws Exception {
         String firstName = "John";
         String lastName = "Doe";
         String password = "Password1!";
@@ -149,7 +150,7 @@ public class RegistrationControllerTest {
     }
 
     @Test
-    public void signUpWithoutPassword() throws Exception {
+    public void signUpWithBlankPassword() throws Exception {
         String firstName = "John";
         String lastName = "Doe";
         String email = "test@myemail.com";
@@ -167,7 +168,7 @@ public class RegistrationControllerTest {
     }
 
     @Test
-    public void signUpWithoutAge() throws Exception {
+    public void signUpWithBlankAge() throws Exception {
         String firstName = "John";
         String lastName = "Doe";
         String email = "test@myemail.com";
@@ -182,6 +183,69 @@ public class RegistrationControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest()).andReturn();
+    }
+
+    @Test
+    public void signUpWithInvalidEmailFormat() throws Exception {
+        String firstName = "John";
+        String lastName = "Doe";
+        String email = "test";
+        String password = "Password1!";
+        int age = 21;
+        UserRequestDto request = new UserRequestDto();
+        request.setFirstName(firstName);
+        request.setLastName(lastName);
+        request.setEmail(email);
+        request.setPassword(password);
+        request.setAge(age);
+
+        mockMvc.perform(post("/signup")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+    }
+
+    @Test
+    public void signUpWithInvalidPasswordFormat() throws Exception {
+        String firstName = "John";
+        String lastName = "Doe";
+        String email = "test@myemail.com";
+        String password = "password";
+        int age = 21;
+        UserRequestDto request = new UserRequestDto();
+        request.setFirstName(firstName);
+        request.setLastName(lastName);
+        request.setEmail(email);
+        request.setPassword(password);
+        request.setAge(age);
+
+        mockMvc.perform(post("/signup")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+    }
+
+    @Test
+    public void signUpWithInvalidAgeFormat() throws Exception {
+        String firstName = "John";
+        String lastName = "Doe";
+        String email = "test@myemail.com";
+        String password = "Password!1";
+        int age = 1000;
+        UserRequestDto request = new UserRequestDto();
+        request.setFirstName(firstName);
+        request.setLastName(lastName);
+        request.setEmail(email);
+        request.setPassword(password);
+        request.setAge(age);
+
+        mockMvc.perform(post("/signup")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andReturn();
     }
 
     @Test

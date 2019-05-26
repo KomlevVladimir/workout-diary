@@ -1,11 +1,13 @@
 package com.vladimirkomlev.workoutdiary.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.vladimirkomlev.workoutdiary.model.Workout;
 
 import java.time.LocalDate;
 
 public class WorkoutResponseDto {
     private long id;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
     private String description;
 
