@@ -8,15 +8,8 @@ import com.vladimirkomlev.workoutdiary.model.ConfirmationSecret;
 import com.vladimirkomlev.workoutdiary.model.User;
 import com.vladimirkomlev.workoutdiary.repository.ConfirmationSecretRepository;
 import com.vladimirkomlev.workoutdiary.repository.UserRepository;
-import org.junit.Assert;
 import org.junit.Test;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import java.security.Principal;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;

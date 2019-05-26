@@ -28,18 +28,6 @@ public class ControllerExceptionsHandler {
         return ResponseEntity.status(UNAUTHORIZED).body(new Error<>(INVALID_CREDENTIALS, exception.getMessage()));
     }
 
-//    @ExceptionHandler
-//    public ResponseEntity handle(JwtAuthenticationException exception) {
-//        logger.error(exception.getMessage());
-//        return ResponseEntity.status(UNAUTHORIZED).body(new Error<>(UNAUTHENTICATED, exception.getMessage()));
-//    }
-//
-//    @ExceptionHandler(AccessDeniedException.class)
-//    public ResponseEntity handle(AccessDeniedException exception) {
-//        logger.error(exception.getMessage());
-//        return ResponseEntity.status(FORBIDDEN).body(new Error<>(ACCESS_DENIED, exception.getClass().getName()));
-//    }
-
     @ExceptionHandler
     public ResponseEntity handle(ConstraintViolationException exception) {
         String error = exception.getSQLException().getMessage().split("Подробности: ")[1];

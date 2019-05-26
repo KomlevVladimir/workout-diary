@@ -6,8 +6,6 @@ import com.vladimirkomlev.workoutdiary.validation.EmailField;
 import com.vladimirkomlev.workoutdiary.validation.NotBlankField;
 import com.vladimirkomlev.workoutdiary.validation.Password;
 
-import javax.validation.constraints.Email;
-
 public class UserRequestDto {
     @NotBlankField
     private String firstName;

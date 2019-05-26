@@ -2,14 +2,12 @@ package com.vladimirkomlev.workoutdiary.service;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import static java.util.UUID.randomUUID;
 import static org.junit.Assert.*;
 
 public class SecretLinkServiceTest {
-    @Autowired
     private static SecretLinkServiceImpl secretLinkService = new SecretLinkServiceImpl();
 
     @BeforeClass

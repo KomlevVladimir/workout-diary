@@ -3,6 +3,7 @@ package com.vladimirkomlev.workoutdiary.validation;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
