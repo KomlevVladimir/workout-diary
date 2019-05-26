@@ -58,7 +58,7 @@ public class AuthControllerTest {
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andReturn();
-        
+
         String actualBody = mvcResult.getResponse().getContentAsString();
         String expectedBody = objectMapper.writeValueAsString(response);
 
