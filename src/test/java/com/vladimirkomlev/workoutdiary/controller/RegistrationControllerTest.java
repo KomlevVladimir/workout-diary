@@ -55,6 +55,7 @@ public class RegistrationControllerTest {
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andReturn();
+
         String actualBody = mvcResult.getResponse().getContentAsString();
         String expectedBody = objectMapper.writeValueAsString(response);
 
@@ -86,6 +87,7 @@ public class RegistrationControllerTest {
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andReturn();
+
         String actualBody = mvcResult.getResponse().getContentAsString();
         String expectedBody = objectMapper.writeValueAsString(response);
 
