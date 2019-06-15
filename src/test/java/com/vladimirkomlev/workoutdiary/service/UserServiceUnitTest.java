@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-public class UserServiceTest {
+public class UserServiceUnitTest {
     private UserRepository userRepository = mock(UserRepository.class);
     private BCryptPasswordEncoder passwordEncoder = mock(BCryptPasswordEncoder.class);
     private ConfirmationSecretRepository confirmationSecretRepository = mock(ConfirmationSecretRepository.class);

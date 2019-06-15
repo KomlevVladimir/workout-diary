@@ -29,7 +29,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class WorkoutControllerTest {
+public class WorkoutControllerUnitTest {
     private MockMvc mockMvc;
     private WorkoutService workoutService = mock(WorkoutService.class);
     private WorkoutController workoutController = new WorkoutController(workoutService);

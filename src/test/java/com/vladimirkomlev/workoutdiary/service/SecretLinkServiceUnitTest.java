@@ -7,7 +7,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import static java.util.UUID.randomUUID;
 import static org.junit.Assert.*;
 
-public class SecretLinkServiceTest {
+public class SecretLinkServiceUnitTest {
     private static SecretLinkServiceImpl secretLinkService = new SecretLinkServiceImpl();
 
     @BeforeClass

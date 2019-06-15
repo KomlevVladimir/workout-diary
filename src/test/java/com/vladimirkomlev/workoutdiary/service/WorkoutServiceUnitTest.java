@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-public class WorkoutServiceTest {
+public class WorkoutServiceUnitTest {
     private WorkoutRepository workoutRepository = mock(WorkoutRepository.class);
     private UserService userService = mock(UserService.class);
     private WorkoutServiceImpl workoutService = new WorkoutServiceImpl(workoutRepository, userService);

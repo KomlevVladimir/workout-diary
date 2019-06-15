@@ -1,6 +1,5 @@
 package com.vladimirkomlev.workoutdiary.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vladimirkomlev.workoutdiary.dto.ResetPasswordRequestDto;
 import com.vladimirkomlev.workoutdiary.dto.SetupPasswordRequestDto;
@@ -18,7 +17,7 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class PasswordControllerTest {
+public class PasswordControllerUnitTest {
     private MockMvc mockMvc;
     private UserService userService = mock(UserService.class);
     private PasswordController passwordController = new PasswordController(userService);

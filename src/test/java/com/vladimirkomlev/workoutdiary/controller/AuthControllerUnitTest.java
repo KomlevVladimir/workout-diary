@@ -17,14 +17,13 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class AuthControllerTest {
+public class AuthControllerUnitTest {
     private MockMvc mockMvc;
     private AuthenticationManager authenticationManager = mock(AuthenticationManager.class);
     private JwtTokenProvider jwtTokenProvider = mock(JwtTokenProvider.class);

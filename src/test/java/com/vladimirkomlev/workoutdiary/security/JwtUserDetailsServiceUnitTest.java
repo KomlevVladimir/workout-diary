@@ -10,7 +10,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class JwtUserDetailsServiceTest {
+public class JwtUserDetailsServiceUnitTest {
     private UserService userService = mock(UserService.class);
     private JwtUserDetailsService jwtUserDetailsService = new JwtUserDetailsService(userService);
 
