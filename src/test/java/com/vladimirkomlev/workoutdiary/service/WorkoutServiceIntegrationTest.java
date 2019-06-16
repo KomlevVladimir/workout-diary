@@ -27,6 +27,7 @@ import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TE
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @Sql(value = {"/create-user-before.sql", "/create-workout-before.sql"}, executionPhase = BEFORE_TEST_METHOD)
 @Sql(value = {"/create-workout-after.sql", "/create-user-after.sql"}, executionPhase = AFTER_TEST_METHOD)
+@WithUserDetails("test@myemail.com")
 public class WorkoutServiceIntegrationTest {
     @Autowired
     private WorkoutService workoutService;
@@ -35,7 +36,6 @@ public class WorkoutServiceIntegrationTest {
     public ExpectedException exceptionRule = ExpectedException.none();
 
     @Test
-    @WithUserDetails("test@myemail.com")
     public void getAllWorkoutsByUserId() {
         List<Workout> workouts = workoutService.getAllWorkoutsByUserId(25L);
 
@@ -47,7 +47,6 @@ public class WorkoutServiceIntegrationTest {
     }
 
     @Test
-    @WithUserDetails("test@myemail.com")
     public void getWorkout() {
         Workout workout = workoutService.get(25L, 10L);
 
@@ -58,7 +57,6 @@ public class WorkoutServiceIntegrationTest {
     }
 
     @Test
-    @WithUserDetails("test@myemail.com")
     public void createWorkout() {
         LocalDate date = LocalDate.parse("2014-05-22");
         String description = "Running 5 miles";
@@ -73,7 +71,6 @@ public class WorkoutServiceIntegrationTest {
     }
 
     @Test
-    @WithUserDetails("test@myemail.com")
     public void updateWorkout() {
         LocalDate date = LocalDate.parse("2014-05-22");
         String description = "Playing football";
@@ -87,7 +84,6 @@ public class WorkoutServiceIntegrationTest {
     }
 
     @Test
-    @WithUserDetails("test@myemail.com")
     public void delete() {
         workoutService.delete(25L, 10L);
 

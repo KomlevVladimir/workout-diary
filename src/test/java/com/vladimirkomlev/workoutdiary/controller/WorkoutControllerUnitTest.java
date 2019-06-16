@@ -12,7 +12,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -26,6 +25,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -63,7 +63,7 @@ public class WorkoutControllerUnitTest {
         response.setDescription(description);
 
         MvcResult mvcResult = mockMvc.perform(post("/users/{userId}/workouts", currentUserId)
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -80,7 +80,7 @@ public class WorkoutControllerUnitTest {
         request.setDate(LocalDate.parse("2014-05-22"));
 
         mockMvc.perform(post("/users/{userId}/workouts", 200L)
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
                 .andReturn();
@@ -92,7 +92,7 @@ public class WorkoutControllerUnitTest {
         request.setDescription("Swimming 1 mile");
 
         mockMvc.perform(post("/users/{userId}/workouts", 200)
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
                 .andReturn();
@@ -167,7 +167,7 @@ public class WorkoutControllerUnitTest {
         expectedWorkoutResponse.setDescription(description);
 
         MvcResult mvcResult = mockMvc.perform(put("/users/{userId}/workouts/{workoutId}", currentUserId, workoutId)
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andReturn();

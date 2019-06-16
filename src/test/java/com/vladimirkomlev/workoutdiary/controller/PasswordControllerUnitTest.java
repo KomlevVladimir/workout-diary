@@ -6,7 +6,6 @@ import com.vladimirkomlev.workoutdiary.dto.SetupPasswordRequestDto;
 import com.vladimirkomlev.workoutdiary.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -14,6 +13,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -34,7 +34,7 @@ public class PasswordControllerUnitTest {
         request.setEmail("test@myemail.com");
 
         mockMvc.perform(post("/reset-password")
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -46,7 +46,7 @@ public class PasswordControllerUnitTest {
         ResetPasswordRequestDto request = new ResetPasswordRequestDto();
 
         mockMvc.perform(post("/reset-password")
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
                 .andReturn();
@@ -59,7 +59,7 @@ public class PasswordControllerUnitTest {
         request.setSecret("secret");
 
         mockMvc.perform(post("/setup-password")
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -72,7 +72,7 @@ public class PasswordControllerUnitTest {
         request.setSecret("secret");
 
         mockMvc.perform(post("/setup-password")
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
                 .andReturn();
@@ -84,7 +84,7 @@ public class PasswordControllerUnitTest {
         request.setPassword("Password!1");
 
         mockMvc.perform(post("/setup-password")
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
                 .andReturn();
