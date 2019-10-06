@@ -1,5 +1,6 @@
 package com.vladimirkomlev.workoutdiary.controller;
 
+import com.vladimirkomlev.workoutdiary.dto.ConfirmationRequestDto;
 import com.vladimirkomlev.workoutdiary.dto.UserRequestDto;
 import com.vladimirkomlev.workoutdiary.dto.UserResponseDto;
 import com.vladimirkomlev.workoutdiary.exception.NotFoundException;
@@ -69,7 +70,9 @@ public class RegistrationControllerIntegrationTest {
     @Test
     @Sql(value = "/create-confirmation-secret-before.sql", executionPhase = BEFORE_TEST_METHOD)
     public void confirm() {
-        ResponseEntity response = registrationController.confirm("secret");
+        ConfirmationRequestDto confirmationReques = new ConfirmationRequestDto();
+        confirmationReques.setSecret("secret");
+        ResponseEntity response = registrationController.confirm(confirmationReques);
         UserResponseDto responseBody = (UserResponseDto) response.getBody();
 
         assertThat(response.getStatusCode(), equalTo(OK));
@@ -84,6 +87,8 @@ public class RegistrationControllerIntegrationTest {
     public void confirmWithNonExistentSecret() {
         exceptionRule.expect(NotFoundException.class);
         exceptionRule.expectMessage("Secret not found");
-        registrationController.confirm("qwerty");
+        ConfirmationRequestDto confirmationReques = new ConfirmationRequestDto();
+        confirmationReques.setSecret("qwerty");
+        registrationController.confirm(confirmationReques);
     }
 }

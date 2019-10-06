@@ -1,6 +1,7 @@
 package com.vladimirkomlev.workoutdiary.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vladimirkomlev.workoutdiary.dto.ConfirmationRequestDto;
 import com.vladimirkomlev.workoutdiary.dto.UserRequestDto;
 import com.vladimirkomlev.workoutdiary.dto.UserResponseDto;
 import com.vladimirkomlev.workoutdiary.model.User;
@@ -256,13 +257,17 @@ public class RegistrationControllerUnitTest {
         mockUser.setFirstName(firstName);
         mockUser.setLastName(lastName);
         when(userService.confirm(anyString())).thenReturn(mockUser);
+        ConfirmationRequestDto request = new ConfirmationRequestDto();
+        request.setSecret("secret");
         UserResponseDto response = new UserResponseDto();
         response.setFirstName(firstName);
         response.setLastName(lastName);
-        MvcResult mvcResult = mockMvc.perform(get("/confirm")
-                .param("secret", secret))
+        MvcResult mvcResult = mockMvc.perform(post("/confirm")
+                .contentType(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andReturn();
+
         String actualBody = mvcResult.getResponse().getContentAsString();
         String expectedBody = objectMapper.writeValueAsString(response);
 

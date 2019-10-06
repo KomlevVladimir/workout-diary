@@ -1,5 +1,6 @@
 package com.vladimirkomlev.workoutdiary.controller;
 
+import com.vladimirkomlev.workoutdiary.dto.ConfirmationRequestDto;
 import com.vladimirkomlev.workoutdiary.dto.UserRequestDto;
 import com.vladimirkomlev.workoutdiary.dto.UserResponseDto;
 import com.vladimirkomlev.workoutdiary.model.User;
@@ -28,9 +29,9 @@ public class RegistrationController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("confirm")
-    public ResponseEntity confirm(@RequestParam String secret) {
-        User user = userService.confirm(secret);
+    @PostMapping(value = "confirm")
+    public ResponseEntity confirm(@Valid @RequestBody ConfirmationRequestDto confirmationRequestDto) {
+        User user = userService.confirm(confirmationRequestDto.getSecret());
         UserResponseDto response = UserResponseDto.toUserResponseDto(user);
         return ResponseEntity.ok(response);
     }

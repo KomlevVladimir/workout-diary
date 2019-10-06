@@ -20,14 +20,12 @@ public class UserServiceUnitTest {
     private UserRepository userRepository = mock(UserRepository.class);
     private BCryptPasswordEncoder passwordEncoder = mock(BCryptPasswordEncoder.class);
     private ConfirmationSecretRepository confirmationSecretRepository = mock(ConfirmationSecretRepository.class);
-    private SecretLinkService secretLinkService = mock(SecretLinkService.class);
     private MessageQueues messageQueues = mock(MessageQueues.class);
     private UserServiceImpl userService = new UserServiceImpl(
             userRepository,
             passwordEncoder,
             messageQueues,
-            confirmationSecretRepository,
-            secretLinkService
+            confirmationSecretRepository
     );
 
     @Test
@@ -92,7 +90,6 @@ public class UserServiceUnitTest {
         userService.resetPassword(request);
 
         verify(confirmationSecretRepository, times(1)).save(any(ConfirmationSecret.class));
-        verify(secretLinkService, times(1)).generatePasswordLink(anyString());
         verify(messageQueues, times(1)).enqueueEmail(any(EmailMessage.class));
     }
 

@@ -24,21 +24,18 @@ public class UserServiceImpl implements UserService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final MessageQueues messageQueues;
     private final ConfirmationSecretRepository confirmationSecretRepository;
-    private final SecretLinkService secretLinkService;
 
     @Autowired
     public UserServiceImpl(
             UserRepository userRepository,
             BCryptPasswordEncoder passwordEncoder,
             MessageQueues messageQueues,
-            ConfirmationSecretRepository confirmationSecretRepository,
-            SecretLinkService secretLinkService
+            ConfirmationSecretRepository confirmationSecretRepository
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.messageQueues = messageQueues;
         this.confirmationSecretRepository = confirmationSecretRepository;
-        this.secretLinkService = secretLinkService;
     }
 
     @Override
@@ -58,8 +55,7 @@ public class UserServiceImpl implements UserService {
             EmailMessage message = new EmailMessage();
             message.setRecipient(user.getEmail());
             message.setSubject("Confirm your account");
-            String link = secretLinkService.generateConfirmationEmailLink(confirmationSecret.getSecret());
-            message.setMessage(link);
+            message.setMessage("Your confirmation secret is: " + confirmationSecret.getSecret());
             messageQueues.enqueueEmail(message);
         } else {
             throw new NotFoundException("User is not created");
@@ -88,8 +84,7 @@ public class UserServiceImpl implements UserService {
             EmailMessage message = new EmailMessage();
             message.setRecipient(user.getEmail());
             message.setSubject("Reset password");
-            String link = secretLinkService.generatePasswordLink(confirmationSecret.getSecret());
-            message.setMessage(link);
+            message.setMessage("Your reset password secret is: " + confirmationSecret.getSecret());
             messageQueues.enqueueEmail(message);
         } else {
             throw new NotFoundException("User not found");

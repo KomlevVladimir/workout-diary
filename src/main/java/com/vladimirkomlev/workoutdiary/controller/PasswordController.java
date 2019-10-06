@@ -25,12 +25,6 @@ public class PasswordController {
         return ResponseEntity.ok(null);
     }
 
-    @GetMapping(value = "reset")
-    public ResponseEntity reset(@RequestParam String secret) {
-        //TODO return page with forms password and predefined secret
-        return ResponseEntity.ok(null);
-    }
-
     @PostMapping(value = "setup-password")
     public ResponseEntity setupPassword(@Valid @RequestBody SetupPasswordRequestDto setupPasswordRequestDto) {
         userService.setupPassword(setupPasswordRequestDto);
