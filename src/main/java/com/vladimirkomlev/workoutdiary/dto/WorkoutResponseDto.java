@@ -7,6 +7,7 @@ import java.time.LocalDate;
 
 public class WorkoutResponseDto {
     private long id;
+    private String title;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
     private String description;
@@ -14,6 +15,7 @@ public class WorkoutResponseDto {
     public static WorkoutResponseDto toWorkoutResponseDto(Workout workout) {
         WorkoutResponseDto response = new WorkoutResponseDto();
         response.setId(workout.getId());
+        response.setTitle(workout.getTitle());
         response.setDate(workout.getDate());
         response.setDescription(workout.getDescription());
         return response;
@@ -25,6 +27,14 @@ public class WorkoutResponseDto {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public LocalDate getDate() {

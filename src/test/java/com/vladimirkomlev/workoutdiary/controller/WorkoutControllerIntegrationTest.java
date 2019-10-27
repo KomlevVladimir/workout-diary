@@ -44,7 +44,7 @@ public class WorkoutControllerIntegrationTest {
     @Test
     public void createWorkout() {
         WorkoutCreateUpdateRequestDto request =
-                new WorkoutCreateUpdateRequestDto(LocalDate.parse("2014-05-22"), "Swimming 2 miles");
+                new WorkoutCreateUpdateRequestDto(LocalDate.parse("2014-05-22"), "Swimming 2 miles", "Swimming");
 
         ResponseEntity response = workoutController.createWorkout(25L, request);
         WorkoutResponseDto responseBody = (WorkoutResponseDto) response.getBody();
@@ -53,12 +53,13 @@ public class WorkoutControllerIntegrationTest {
         assertThat(requireNonNull(responseBody).getId(), greaterThan(0L));
         assertThat(responseBody.getDate(), equalTo(request.getDate()));
         assertThat(responseBody.getDescription(), equalTo(request.getDescription()));
+        assertThat(responseBody.getTitle(), equalTo(request.getTitle()));
     }
 
     @Test
     public void createWorkoutByNotCurrentUser() {
         WorkoutCreateUpdateRequestDto request =
-                new WorkoutCreateUpdateRequestDto(LocalDate.parse("2014-05-22"), "Swimming 2 miles");
+                new WorkoutCreateUpdateRequestDto(LocalDate.parse("2014-05-22"), "Swimming 2 miles", "Swimming");
 
         exceptionRule.expect(AccessDeniedException.class);
         exceptionRule.expectMessage("Access denied");
@@ -74,8 +75,10 @@ public class WorkoutControllerIntegrationTest {
         assertThat(requireNonNull(workouts).size(), Matchers.equalTo(2));
         assertThat(workouts.get(0).getDate(), Matchers.equalTo(LocalDate.parse("2018-07-01")));
         assertThat(workouts.get(0).getDescription(), Matchers.equalTo("Cycling 30 miles"));
+        assertThat(workouts.get(0).getTitle(), Matchers.equalTo("Cycling"));
         assertThat(workouts.get(1).getDate(), Matchers.equalTo(LocalDate.parse("2018-08-01")));
         assertThat(workouts.get(1).getDescription(), Matchers.equalTo("Running 5 miles"));
+        assertThat(workouts.get(1).getTitle(), Matchers.equalTo("Morning running"));
     }
 
     @Test
@@ -112,7 +115,7 @@ public class WorkoutControllerIntegrationTest {
     @Test
     public void updateWorkout() {
         WorkoutCreateUpdateRequestDto request =
-                new WorkoutCreateUpdateRequestDto(LocalDate.parse("2014-05-22"), "Swimming 2 miles");
+                new WorkoutCreateUpdateRequestDto(LocalDate.parse("2014-05-22"), "Swimming 2 miles", "Swimming");
 
         ResponseEntity response = workoutController.updateWorkout(request, 25L, 10L);
         WorkoutResponseDto responseBody = (WorkoutResponseDto) response.getBody();
@@ -121,12 +124,13 @@ public class WorkoutControllerIntegrationTest {
         assertThat(requireNonNull(responseBody).getId(), equalTo(10L));
         assertThat(responseBody.getDate(), equalTo(request.getDate()));
         assertThat(responseBody.getDescription(), equalTo(request.getDescription()));
+        assertThat(responseBody.getTitle(), equalTo(request.getTitle()));
     }
 
     @Test
     public void updateWorkoutByNotCurrentUser() {
         WorkoutCreateUpdateRequestDto request =
-                new WorkoutCreateUpdateRequestDto(LocalDate.parse("2014-05-22"), "Swimming 2 miles");
+                new WorkoutCreateUpdateRequestDto(LocalDate.parse("2014-05-22"), "Swimming 2 miles", "Morning swimming");
 
         exceptionRule.expect(AccessDeniedException.class);
         exceptionRule.expectMessage("Access denied");
@@ -136,7 +140,7 @@ public class WorkoutControllerIntegrationTest {
     @Test
     public void updateNonExistentWorkout() {
         WorkoutCreateUpdateRequestDto request =
-                new WorkoutCreateUpdateRequestDto(LocalDate.parse("2014-05-22"), "Swimming 2 miles");
+                new WorkoutCreateUpdateRequestDto(LocalDate.parse("2014-05-22"), "Swimming 2 miles", "Swimming");
 
         exceptionRule.expect(NotFoundException.class);
         exceptionRule.expectMessage("Workout not found");

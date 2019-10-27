@@ -59,8 +59,9 @@ public class WorkoutServiceIntegrationTest {
     @Test
     public void createWorkout() {
         LocalDate date = LocalDate.parse("2014-05-22");
+        String title = "Morning running";
         String description = "Running 5 miles";
-        WorkoutCreateUpdateRequestDto request = new WorkoutCreateUpdateRequestDto(date, description);
+        WorkoutCreateUpdateRequestDto request = new WorkoutCreateUpdateRequestDto(date, description, title);
 
         Workout workout = workoutService.create(request, 25L);
 
@@ -73,8 +74,9 @@ public class WorkoutServiceIntegrationTest {
     @Test
     public void updateWorkout() {
         LocalDate date = LocalDate.parse("2014-05-22");
+        String title = "football";
         String description = "Playing football";
-        WorkoutCreateUpdateRequestDto request = new WorkoutCreateUpdateRequestDto(date, description);
+        WorkoutCreateUpdateRequestDto request = new WorkoutCreateUpdateRequestDto(date, description, title);
 
         Workout workout = workoutService.update(request, 25L, 10L);
 

@@ -49,16 +49,18 @@ public class WorkoutControllerUnitTest {
     @Test
     public void createWorkout() throws Exception {
         long workoutId = 44;
+        String title = "Morning running";
         LocalDate date = LocalDate.parse("2014-05-22");
         String description = "Running 5 miles";
         long currentUserId = 200;
         User mockCurrentUser = new User();
         mockCurrentUser.setId(currentUserId);
-        Workout mockWorkout = new Workout(workoutId, date, description, mockCurrentUser);
-        WorkoutCreateUpdateRequestDto request = new WorkoutCreateUpdateRequestDto(date, description);
+        Workout mockWorkout = new Workout(workoutId, date, title, description, mockCurrentUser);
+        WorkoutCreateUpdateRequestDto request = new WorkoutCreateUpdateRequestDto(date, description, title);
         when(workoutService.create(any(WorkoutCreateUpdateRequestDto.class), anyLong())).thenReturn(mockWorkout);
         WorkoutResponseDto response = new WorkoutResponseDto();
         response.setId(workoutId);
+        response.setTitle(title);
         response.setDate(date);
         response.setDescription(description);
 
@@ -78,6 +80,20 @@ public class WorkoutControllerUnitTest {
     public void createWorkoutWithBlankDescription() throws Exception {
         WorkoutCreateUpdateRequestDto request = new WorkoutCreateUpdateRequestDto();
         request.setDate(LocalDate.parse("2014-05-22"));
+        request.setTitle("Morning running");
+
+        mockMvc.perform(post("/users/{userId}/workouts", 200L)
+                .contentType(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+    }
+
+    @Test
+    public void createWorkoutWithBlankTitle() throws Exception {
+        WorkoutCreateUpdateRequestDto request = new WorkoutCreateUpdateRequestDto();
+        request.setDate(LocalDate.parse("2014-05-22"));
+        request.setDescription("Swimming 1 mile");
 
         mockMvc.perform(post("/users/{userId}/workouts", 200L)
                 .contentType(APPLICATION_JSON)
@@ -90,6 +106,7 @@ public class WorkoutControllerUnitTest {
     public void createWorkoutWithBlankDate() throws Exception {
         WorkoutCreateUpdateRequestDto request = new WorkoutCreateUpdateRequestDto();
         request.setDescription("Swimming 1 mile");
+        request.setTitle("Swimming");
 
         mockMvc.perform(post("/users/{userId}/workouts", 200)
                 .contentType(APPLICATION_JSON)
@@ -101,17 +118,19 @@ public class WorkoutControllerUnitTest {
     @Test
     public void getAllWorkouts() throws Exception {
         long workoutId = 44;
+        String title = "Morning running";
         LocalDate date = LocalDate.parse("2014-05-22");
         String description = "Running 5 miles";
         long currentUserId = 200;
         User mockCurrentUser = new User();
         mockCurrentUser.setId(currentUserId);
-        Workout mockWorkout = new Workout(workoutId, date, description, mockCurrentUser);
+        Workout mockWorkout = new Workout(workoutId, date, title, description, mockCurrentUser);
         List<Workout> mockWorkouts = new ArrayList<>();
         mockWorkouts.add(mockWorkout);
         when(workoutService.getAllWorkoutsByUserId(currentUserId)).thenReturn(mockWorkouts);
         WorkoutResponseDto expectedWorkoutResponse = new WorkoutResponseDto();
         expectedWorkoutResponse.setId(workoutId);
+        expectedWorkoutResponse.setTitle(title);
         expectedWorkoutResponse.setDate(date);
         expectedWorkoutResponse.setDescription(description);
 
@@ -128,15 +147,17 @@ public class WorkoutControllerUnitTest {
     @Test
     public void getWorkout() throws Exception {
         long workoutId = 44;
+        String title = "Morning running";
         LocalDate date = LocalDate.parse("2014-05-22");
         String description = "Running 5 miles";
         long currentUserId = 200;
         User mockCurrentUser = new User();
         mockCurrentUser.setId(currentUserId);
-        Workout mockWorkout = new Workout(workoutId, date, description, mockCurrentUser);
+        Workout mockWorkout = new Workout(workoutId, date, title, description, mockCurrentUser);
         when(workoutService.get(currentUserId, workoutId)).thenReturn(mockWorkout);
         WorkoutResponseDto expectedWorkoutResponse = new WorkoutResponseDto();
         expectedWorkoutResponse.setId(workoutId);
+        expectedWorkoutResponse.setTitle(title);
         expectedWorkoutResponse.setDate(date);
         expectedWorkoutResponse.setDescription(description);
 
@@ -153,16 +174,18 @@ public class WorkoutControllerUnitTest {
     @Test
     public void updateWorkout() throws Exception {
         long workoutId = 44;
+        String title = "Morning running";
         LocalDate date = LocalDate.parse("2014-05-22");
         String description = "Running 5 miles";
         long currentUserId = 200;
         User mockCurrentUser = new User();
         mockCurrentUser.setId(currentUserId);
-        Workout mockWorkout = new Workout(workoutId, date, description, mockCurrentUser);
-        WorkoutCreateUpdateRequestDto request = new WorkoutCreateUpdateRequestDto(date, description);
+        Workout mockWorkout = new Workout(workoutId, date, title, description, mockCurrentUser);
+        WorkoutCreateUpdateRequestDto request = new WorkoutCreateUpdateRequestDto(date, description, title);
         when(workoutService.update(any(WorkoutCreateUpdateRequestDto.class), anyLong(), anyLong())).thenReturn(mockWorkout);
         WorkoutResponseDto expectedWorkoutResponse = new WorkoutResponseDto();
         expectedWorkoutResponse.setId(workoutId);
+        expectedWorkoutResponse.setTitle(title);
         expectedWorkoutResponse.setDate(date);
         expectedWorkoutResponse.setDescription(description);
 

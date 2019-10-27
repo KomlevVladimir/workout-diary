@@ -31,19 +31,21 @@ public class WorkoutServiceUnitTest {
     @Test
     public void createWorkout() {
         LocalDate date = LocalDate.parse("2014-05-22");
+        String title = "Running";
         String description = "Running 5 miles";
         long currentUserId = 200L;
         User mockCurrentUser = new User();
         mockCurrentUser.setId(currentUserId);
         when(userService.getCurrentUser()).thenReturn(mockCurrentUser);
-        Workout mockWorkout = new Workout(0, date, description, mockCurrentUser);
+        Workout mockWorkout = new Workout(0, date, title, description, mockCurrentUser);
         when(workoutRepository.save(any(Workout.class))).thenReturn(mockWorkout);
-        WorkoutCreateUpdateRequestDto request = new WorkoutCreateUpdateRequestDto(date, description);
+        WorkoutCreateUpdateRequestDto request = new WorkoutCreateUpdateRequestDto(date, description, title);
         Workout workout = workoutService.create(request, currentUserId);
 
         assertThat(workout.getDate(), equalTo(date));
         assertThat(workout.getDescription(), equalTo(description));
         assertThat(workout.getUser(), equalTo(mockCurrentUser));
+        assertThat(workout.getTitle(), equalTo(title));
         verify(userService, times(1)).getCurrentUser();
         verify(workoutRepository, times(1)).save(any(Workout.class));
     }
@@ -51,14 +53,15 @@ public class WorkoutServiceUnitTest {
     @Test
     public void createWorkoutForAnotherUser() {
         LocalDate date = LocalDate.parse("2019-03-15");
+        String title = "Running";
         String description = "Running 5 miles";
         long currentUserId = 300L;
         User mockCurrentUser = new User();
         mockCurrentUser.setId(currentUserId);
         when(userService.getCurrentUser()).thenReturn(mockCurrentUser);
-        Workout mockWorkout = new Workout(0, date, description, mockCurrentUser);
+        Workout mockWorkout = new Workout(0, date, title, description, mockCurrentUser);
         when(workoutRepository.save(any(Workout.class))).thenReturn(mockWorkout);
-        WorkoutCreateUpdateRequestDto request = new WorkoutCreateUpdateRequestDto(date, description);
+        WorkoutCreateUpdateRequestDto request = new WorkoutCreateUpdateRequestDto(date, description, title);
 
         exceptionRule.expect(AccessDeniedException.class);
         exceptionRule.expectMessage("Access denied");
@@ -68,19 +71,21 @@ public class WorkoutServiceUnitTest {
     @Test
     public void getWorkout() {
         LocalDate date = LocalDate.parse("2019-03-15");
+        String title = "Running";
         String description = "Running 5 miles";
         long currentUserId = 300L;
         long workoutId = 289L;
         User mockCurrentUser = new User();
         mockCurrentUser.setId(currentUserId);
         when(userService.getCurrentUser()).thenReturn(mockCurrentUser);
-        Workout mockWorkout = new Workout(workoutId, date, description, mockCurrentUser);
+        Workout mockWorkout = new Workout(workoutId, date, title, description, mockCurrentUser);
         when(workoutRepository.findById(workoutId)).thenReturn(of(mockWorkout));
         Workout workout = workoutService.get(currentUserId, workoutId);
 
         assertThat(workout.getDate(), equalTo(date));
         assertThat(workout.getDescription(), equalTo(description));
         assertThat(workout.getId(), equalTo(workoutId));
+        assertThat(workout.getTitle(), equalTo(title));
         assertThat(workout.getUser(), equalTo(mockCurrentUser));
         verify(userService, times(1)).getCurrentUser();
         verify(workoutRepository, times(1)).findById(workoutId);
@@ -89,13 +94,14 @@ public class WorkoutServiceUnitTest {
     @Test
     public void getWorkoutForAnotherUser() {
         LocalDate date = LocalDate.parse("2019-03-15");
+        String title = "Running";
         String description = "Running 5 miles";
         long currentUserId = 300L;
         long workoutId = 289L;
         User mockCurrentUser = new User();
         mockCurrentUser.setId(currentUserId);
         when(userService.getCurrentUser()).thenReturn(mockCurrentUser);
-        Workout mockWorkout = new Workout(workoutId, date, description, mockCurrentUser);
+        Workout mockWorkout = new Workout(workoutId, date, title, description, mockCurrentUser);
         when(workoutRepository.findById(workoutId)).thenReturn(of(mockWorkout));
 
         exceptionRule.expect(AccessDeniedException.class);
@@ -119,24 +125,27 @@ public class WorkoutServiceUnitTest {
     public void updateWorkout() {
         long workoutId = 55L;
         long currentUserId = 200L;
+        String title = "Running";
         LocalDate currentDate = LocalDate.parse("2014-05-22");
         String currentDescription = "Running 5 miles";
         LocalDate newDate = LocalDate.parse("2018-01-02");
+        String newTitle = "Swimming";
         String newDescription = "Swimming 1 mile";
         User mockCurrentUser = new User();
         mockCurrentUser.setId(currentUserId);
         when(userService.getCurrentUser()).thenReturn(mockCurrentUser);
-        Workout currentMockWorkout = new Workout(workoutId, currentDate, currentDescription, mockCurrentUser);
+        Workout currentMockWorkout = new Workout(workoutId, currentDate, title, currentDescription, mockCurrentUser);
         when(workoutRepository.findById(workoutId)).thenReturn(of(currentMockWorkout));
-        Workout newMockWorkout = new Workout(workoutId, newDate, newDescription, mockCurrentUser);
+        Workout newMockWorkout = new Workout(workoutId, newDate, newTitle, newDescription, mockCurrentUser);
         when(workoutRepository.save(any(Workout.class))).thenReturn(newMockWorkout);
-        WorkoutCreateUpdateRequestDto request = new WorkoutCreateUpdateRequestDto(newDate, newDescription);
+        WorkoutCreateUpdateRequestDto request = new WorkoutCreateUpdateRequestDto(newDate, newDescription, newTitle);
         Workout updatedWorkout = workoutService.update(request, currentUserId, workoutId);
 
         assertThat(updatedWorkout.getDate(), equalTo(newDate));
         assertThat(updatedWorkout.getDescription(), equalTo(newDescription));
         assertThat(updatedWorkout.getId(), equalTo(workoutId));
         assertThat(updatedWorkout.getUser(), equalTo(mockCurrentUser));
+        assertThat(updatedWorkout.getTitle(), equalTo(newTitle));
         verify(userService, times(1)).getCurrentUser();
         verify(workoutRepository, times(1)).findById(workoutId);
         verify(workoutRepository, times(1)).save(any(Workout.class));
@@ -146,18 +155,20 @@ public class WorkoutServiceUnitTest {
     public void updateWorkoutForAnotherUser() {
         long workoutId = 55L;
         long currentUserId = 200L;
+        String title = "Running";
         LocalDate currentDate = LocalDate.parse("2014-05-22");
         String currentDescription = "Running 5 miles";
         LocalDate newDate = LocalDate.parse("2018-01-02");
+        String newTitle = "Swimming";
         String newDescription = "Swimming 1 mile";
         User mockCurrentUser = new User();
         mockCurrentUser.setId(currentUserId);
         when(userService.getCurrentUser()).thenReturn(mockCurrentUser);
-        Workout currentMockWorkout = new Workout(workoutId, currentDate, currentDescription, mockCurrentUser);
+        Workout currentMockWorkout = new Workout(workoutId, currentDate, title, currentDescription, mockCurrentUser);
         when(workoutRepository.findById(workoutId)).thenReturn(of(currentMockWorkout));
-        Workout newMockWorkout = new Workout(workoutId, newDate, newDescription, mockCurrentUser);
+        Workout newMockWorkout = new Workout(workoutId, newDate, newTitle, newDescription, mockCurrentUser);
         when(workoutRepository.save(any(Workout.class))).thenReturn(newMockWorkout);
-        WorkoutCreateUpdateRequestDto request = new WorkoutCreateUpdateRequestDto(newDate, newDescription);
+        WorkoutCreateUpdateRequestDto request = new WorkoutCreateUpdateRequestDto(newDate, newDescription, newTitle);
 
         exceptionRule.expect(AccessDeniedException.class);
         exceptionRule.expectMessage("Access denied");
@@ -172,7 +183,7 @@ public class WorkoutServiceUnitTest {
         mockCurrentUser.setId(currentUserId);
         when(userService.getCurrentUser()).thenReturn(mockCurrentUser);
         WorkoutCreateUpdateRequestDto request =
-                new WorkoutCreateUpdateRequestDto(LocalDate.parse("2018-01-02"), "Swimming 1 mile");
+                new WorkoutCreateUpdateRequestDto(LocalDate.parse("2018-01-02"), "Swimming 1 mile", "Swimming");
 
         exceptionRule.expect(NotFoundException.class);
         exceptionRule.expectMessage("Workout not found");
@@ -182,13 +193,14 @@ public class WorkoutServiceUnitTest {
     @Test
     public void deleteWorkout() {
         LocalDate date = LocalDate.parse("2019-03-15");
+        String title = "Running";
         String description = "Running 5 miles";
         long currentUserId = 300L;
         long workoutId = 289L;
         User mockCurrentUser = new User();
         mockCurrentUser.setId(currentUserId);
         when(userService.getCurrentUser()).thenReturn(mockCurrentUser);
-        Workout mockWorkout = new Workout(workoutId, date, description, mockCurrentUser);
+        Workout mockWorkout = new Workout(workoutId, date, title, description, mockCurrentUser);
         when(workoutRepository.findById(workoutId)).thenReturn(of(mockWorkout));
         workoutService.delete(currentUserId, workoutId);
 
@@ -200,13 +212,14 @@ public class WorkoutServiceUnitTest {
     @Test
     public void deleteWorkoutForAnotherUser() {
         LocalDate date = LocalDate.parse("2019-03-15");
+        String title = "Running";
         String description = "Running 5 miles";
         long currentUserId = 300L;
         long workoutId = 289L;
         User mockCurrentUser = new User();
         mockCurrentUser.setId(currentUserId);
         when(userService.getCurrentUser()).thenReturn(mockCurrentUser);
-        Workout mockWorkout = new Workout(workoutId, date, description, mockCurrentUser);
+        Workout mockWorkout = new Workout(workoutId, date, title, description, mockCurrentUser);
         when(workoutRepository.findById(workoutId)).thenReturn(of(mockWorkout));
 
         exceptionRule.expect(AccessDeniedException.class);
@@ -230,12 +243,13 @@ public class WorkoutServiceUnitTest {
     public void getAllWorkoutsByUserId() {
         long currentUserId = 300L;
         long workoutId = 289L;
+        String title = "Running";
         LocalDate date = LocalDate.parse("2019-03-15");
         String description = "Running 5 miles";
         User mockCurrentUser = new User();
         mockCurrentUser.setId(currentUserId);
         when(userService.getCurrentUser()).thenReturn(mockCurrentUser);
-        Workout mockWorkout = new Workout(workoutId, date, description, mockCurrentUser);
+        Workout mockWorkout = new Workout(workoutId, date, title, description, mockCurrentUser);
         when(workoutRepository.findAll()).thenReturn(Collections.singletonList(mockWorkout));
         List<Workout> workouts = workoutService.getAllWorkoutsByUserId(currentUserId);
 
@@ -243,6 +257,7 @@ public class WorkoutServiceUnitTest {
         assertThat(workouts.get(0).getDate(), equalTo(date));
         assertThat(workouts.get(0).getDescription(), equalTo(description));
         assertThat(workouts.get(0).getUser(), equalTo(mockCurrentUser));
+        assertThat(workouts.get(0).getTitle(), equalTo(title));
         verify(userService, times(1)).getCurrentUser();
         verify(workoutRepository, times(1)).findAll();
     }
@@ -250,12 +265,13 @@ public class WorkoutServiceUnitTest {
     @Test
     public void getAllWorkoutsByAnotherUserId() {
         long workoutId = 289L;
+        String title = "Running";
         LocalDate date = LocalDate.parse("2019-03-15");
         String description = "Running 5 miles";
         User mockCurrentUser = new User();
         mockCurrentUser.setId(300L);
         when(userService.getCurrentUser()).thenReturn(mockCurrentUser);
-        Workout mockWorkout = new Workout(workoutId, date, description, mockCurrentUser);
+        Workout mockWorkout = new Workout(workoutId, date, title, description, mockCurrentUser);
         when(workoutRepository.findAll()).thenReturn(Collections.singletonList(mockWorkout));
 
         exceptionRule.expect(AccessDeniedException.class);

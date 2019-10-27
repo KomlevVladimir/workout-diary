@@ -9,6 +9,8 @@ public class Workout {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Column(name = "title")
+    private String title;
     @Column(name = "workout_date")
     private LocalDate date;
     @Column(name = "description")
@@ -21,8 +23,9 @@ public class Workout {
 
     }
 
-    public Workout(long id, LocalDate date, String description, User user) {
+    public Workout(long id, LocalDate date, String title, String description, User user) {
         this.id = id;
+        this.title = title;
         this.date = date;
         this.description = description;
         this.user = user;
@@ -34,6 +37,14 @@ public class Workout {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public LocalDate getDate() {

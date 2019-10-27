@@ -54,6 +54,7 @@ public class WorkoutServiceImpl implements WorkoutService {
         User currentUser = userService.getCurrentUser();
         if (currentUser.getId().equals(userId)) {
             Workout workout = new Workout();
+            workout.setTitle(workoutCreateUpdateRequestDto.getTitle());
             workout.setDate(workoutCreateUpdateRequestDto.getDate());
             workout.setDescription(workoutCreateUpdateRequestDto.getDescription());
             workout.setUser(currentUser);
@@ -68,6 +69,7 @@ public class WorkoutServiceImpl implements WorkoutService {
         User currentUser = userService.getCurrentUser();
         Workout workout = workoutRepository.findById(workoutId).orElseThrow(() -> new NotFoundException("Workout not found"));
         if (currentUser.getId().equals(userId) & workout.getUser().getId().equals(userId)) {
+            workout.setTitle(workoutCreateUpdateRequestDto.getTitle());
             workout.setDate(workoutCreateUpdateRequestDto.getDate());
             workout.setDescription(workoutCreateUpdateRequestDto.getDescription());
             return workoutRepository.save(workout);
