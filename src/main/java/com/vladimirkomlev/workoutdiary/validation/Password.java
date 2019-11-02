@@ -11,7 +11,7 @@ import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @NotBlank(message = "should not be blank")
-@Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\\s).{8,100}$", message = "must have at least 8 characters and include uppercase and lowercase letters, numbers, and symbols")
+@Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\\s).{8,100}$", message = "must have at least 8 characters and include uppercase and lowercase letters and numbers")
 @Constraint(validatedBy = {})
 @Target(FIELD)
 @Retention(RUNTIME)
