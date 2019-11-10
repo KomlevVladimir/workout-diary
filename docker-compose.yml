@@ -1,7 +1,7 @@
 version: "3"
 services:
   postgres:
-    image: "postgres:10"
+    image: "postgres"
     volumes:
     - ./volumes/postgresql-data:/var/lib/postgresql/data
     environment:
