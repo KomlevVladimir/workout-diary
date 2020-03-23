@@ -1,6 +1,6 @@
 package com.vladimirkomlev.workoutdiary.repository;
 
-import com.vladimirkomlev.workoutdiary.model.ConfirmationSecret;
+import com.vladimirkomlev.workoutdiary.model.ConfirmationCode;
 import com.vladimirkomlev.workoutdiary.model.User;
 import org.junit.Assert;
 import org.junit.Test;
@@ -17,29 +17,29 @@ import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class ConfirmationSecretRepositoryIntegrationTest {
+public class ConfirmationCodeRepositoryIntegrationTest {
     @Autowired
-    private ConfirmationSecretRepository confirmationSecretRepository;
+    private ConfirmationCodeRepository confirmationCodeRepository;
 
     @Autowired
     private TestEntityManager entityManager;
 
     @Test
-    public void findBySecret() {
+    public void findByCode() {
         User user = new User();
         user.setEmail("test@myemail.com");
         user.setFirstName("John");
         user.setLastName("Doe");
         user.setPassword("Password!1");
         entityManager.persist(user);
-        ConfirmationSecret secret = new ConfirmationSecret();
-        secret.setSecret("secret");
-        secret.setUser(user);
-        ConfirmationSecret savedSecret = entityManager.persist(secret);
+        ConfirmationCode code = new ConfirmationCode();
+        code.setCode("code");
+        code.setUser(user);
+        ConfirmationCode savedCode = entityManager.persist(code);
 
-        ConfirmationSecret foundSecret = confirmationSecretRepository.findBySecret("secret");
+        ConfirmationCode foundCode = confirmationCodeRepository.findByCode("code");
 
-        assertNotNull(foundSecret);
-        Assert.assertThat(foundSecret, equalTo(savedSecret));
+        assertNotNull(foundCode);
+        Assert.assertThat(foundCode, equalTo(savedCode));
     }
 }

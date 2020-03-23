@@ -73,12 +73,12 @@ public class WorkoutControllerIntegrationTest {
 
         assertThat(response.getStatusCode(), equalTo(OK));
         assertThat(requireNonNull(workouts).size(), Matchers.equalTo(2));
-        assertThat(workouts.get(0).getDate(), Matchers.equalTo(LocalDate.parse("2018-07-01")));
-        assertThat(workouts.get(0).getDescription(), Matchers.equalTo("Cycling 30 miles"));
-        assertThat(workouts.get(0).getTitle(), Matchers.equalTo("Cycling"));
-        assertThat(workouts.get(1).getDate(), Matchers.equalTo(LocalDate.parse("2018-08-01")));
-        assertThat(workouts.get(1).getDescription(), Matchers.equalTo("Running 5 miles"));
-        assertThat(workouts.get(1).getTitle(), Matchers.equalTo("Morning running"));
+        assertThat(workouts.get(0).getDate(), Matchers.equalTo(LocalDate.parse("2018-08-01")));
+        assertThat(workouts.get(0).getDescription(), Matchers.equalTo("Running 5 miles"));
+        assertThat(workouts.get(0).getTitle(), Matchers.equalTo("Morning running"));
+        assertThat(workouts.get(1).getDate(), Matchers.equalTo(LocalDate.parse("2018-07-01")));
+        assertThat(workouts.get(1).getDescription(), Matchers.equalTo("Cycling 30 miles"));
+        assertThat(workouts.get(1).getTitle(), Matchers.equalTo("Cycling"));
     }
 
     @Test

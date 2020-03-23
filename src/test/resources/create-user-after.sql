@@ -1,2 +1,2 @@
-DELETE FROM confirmation_secrets;
+DELETE FROM confirmation_codes;
 DELETE FROM users;

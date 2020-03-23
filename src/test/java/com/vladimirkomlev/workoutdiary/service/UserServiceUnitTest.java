@@ -4,9 +4,9 @@ import com.vladimirkomlev.workoutdiary.dto.ResetPasswordRequestDto;
 import com.vladimirkomlev.workoutdiary.dto.SetupPasswordRequestDto;
 import com.vladimirkomlev.workoutdiary.infra.email.EmailMessage;
 import com.vladimirkomlev.workoutdiary.infra.messaging.MessageQueues;
-import com.vladimirkomlev.workoutdiary.model.ConfirmationSecret;
+import com.vladimirkomlev.workoutdiary.model.ConfirmationCode;
 import com.vladimirkomlev.workoutdiary.model.User;
-import com.vladimirkomlev.workoutdiary.repository.ConfirmationSecretRepository;
+import com.vladimirkomlev.workoutdiary.repository.ConfirmationCodeRepository;
 import com.vladimirkomlev.workoutdiary.repository.UserRepository;
 import org.junit.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,13 +19,13 @@ import static org.mockito.Mockito.*;
 public class UserServiceUnitTest {
     private UserRepository userRepository = mock(UserRepository.class);
     private BCryptPasswordEncoder passwordEncoder = mock(BCryptPasswordEncoder.class);
-    private ConfirmationSecretRepository confirmationSecretRepository = mock(ConfirmationSecretRepository.class);
+    private ConfirmationCodeRepository confirmationCodeRepository = mock(ConfirmationCodeRepository.class);
     private MessageQueues messageQueues = mock(MessageQueues.class);
     private UserServiceImpl userService = new UserServiceImpl(
             userRepository,
             passwordEncoder,
             messageQueues,
-            confirmationSecretRepository
+            confirmationCodeRepository
     );
 
     @Test
@@ -57,26 +57,26 @@ public class UserServiceUnitTest {
         user.setEmail(email);
         userService.verifyEmail(user);
 
-        verify(confirmationSecretRepository, times(1)).save(any(ConfirmationSecret.class));
+        verify(confirmationCodeRepository, times(1)).save(any(ConfirmationCode.class));
         verify(messageQueues, times(1)).enqueueEmail(any(EmailMessage.class));
     }
 
     @Test
     public void confirm() {
-        String secret = "secret";
+        String code = "code";
         String email = "test@myemail.com";
         User mockUser = new User();
         mockUser.setEmail(email);
-        ConfirmationSecret mockConfirmationSecret = new ConfirmationSecret();
-        mockConfirmationSecret.setUser(mockUser);
-        when(confirmationSecretRepository.findBySecret(secret)).thenReturn(mockConfirmationSecret);
+        ConfirmationCode mockConfirmationCode = new ConfirmationCode();
+        mockConfirmationCode.setUser(mockUser);
+        when(confirmationCodeRepository.findByCode(code)).thenReturn(mockConfirmationCode);
         when(userRepository.findByEmailIgnoreCase(anyString())).thenReturn(mockUser);
         when(userRepository.save(any(User.class))).thenReturn(mockUser);
-        User user = userService.confirm(secret);
+        User user = userService.confirm(code);
 
         assertThat(user.getEmail(), equalTo(email));
         assertTrue(user.isEnabled());
-        verify(confirmationSecretRepository, times(1)).delete(any(ConfirmationSecret.class));
+        verify(confirmationCodeRepository, times(1)).delete(any(ConfirmationCode.class));
     }
 
     @Test
@@ -89,28 +89,28 @@ public class UserServiceUnitTest {
         request.setEmail(email);
         userService.resetPassword(request);
 
-        verify(confirmationSecretRepository, times(1)).save(any(ConfirmationSecret.class));
+        verify(confirmationCodeRepository, times(1)).save(any(ConfirmationCode.class));
         verify(messageQueues, times(1)).enqueueEmail(any(EmailMessage.class));
     }
 
     @Test
     public void setupPassword() {
-        String secret = "secret";
+        String code = "code";
         String password = "Password!1";
         String email = "test@myemail.com";
         User mockUser = new User();
         mockUser.setEmail(email);
-        ConfirmationSecret mockConfirmationSecret = new ConfirmationSecret();
-        mockConfirmationSecret.setUser(mockUser);
-        when(confirmationSecretRepository.findBySecret(secret)).thenReturn(mockConfirmationSecret);
+        ConfirmationCode mockConfirmationCode = new ConfirmationCode();
+        mockConfirmationCode.setUser(mockUser);
+        when(confirmationCodeRepository.findByCode(code)).thenReturn(mockConfirmationCode);
         when(userRepository.findByEmailIgnoreCase(email)).thenReturn(mockUser);
         SetupPasswordRequestDto request = new SetupPasswordRequestDto();
-        request.setSecret(secret);
+        request.setCode(code);
         request.setPassword(password);
         userService.setupPassword(request);
 
         verify(passwordEncoder, times(1)).encode(password);
-        verify(confirmationSecretRepository, times(1)).delete(any(ConfirmationSecret.class));
+        verify(confirmationCodeRepository, times(1)).delete(any(ConfirmationCode.class));
         verify(userRepository, times(1)).save(any(User.class));
     }
 

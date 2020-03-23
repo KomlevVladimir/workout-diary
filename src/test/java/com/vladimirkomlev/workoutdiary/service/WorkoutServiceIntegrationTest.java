@@ -40,10 +40,10 @@ public class WorkoutServiceIntegrationTest {
         List<Workout> workouts = workoutService.getAllWorkoutsByUserId(25L);
 
         assertThat(workouts.size(), equalTo(2));
-        assertThat(workouts.get(0).getDate(), equalTo(LocalDate.parse("2018-07-01")));
-        assertThat(workouts.get(0).getDescription(), equalTo("Cycling 30 miles"));
-        assertThat(workouts.get(1).getDate(), equalTo(LocalDate.parse("2018-08-01")));
-        assertThat(workouts.get(1).getDescription(), equalTo("Running 5 miles"));
+        assertThat(workouts.get(0).getDate(), equalTo(LocalDate.parse("2018-08-01")));
+        assertThat(workouts.get(0).getDescription(), equalTo("Running 5 miles"));
+        assertThat(workouts.get(1).getDate(), equalTo(LocalDate.parse("2018-07-01")));
+        assertThat(workouts.get(1).getDescription(), equalTo("Cycling 30 miles"));
     }
 
     @Test

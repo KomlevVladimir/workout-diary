@@ -5,9 +5,9 @@ import com.vladimirkomlev.workoutdiary.dto.SetupPasswordRequestDto;
 import com.vladimirkomlev.workoutdiary.exception.NotFoundException;
 import com.vladimirkomlev.workoutdiary.infra.email.EmailMessage;
 import com.vladimirkomlev.workoutdiary.infra.messaging.MessageQueues;
-import com.vladimirkomlev.workoutdiary.model.ConfirmationSecret;
+import com.vladimirkomlev.workoutdiary.model.ConfirmationCode;
 import com.vladimirkomlev.workoutdiary.model.User;
-import com.vladimirkomlev.workoutdiary.repository.ConfirmationSecretRepository;
+import com.vladimirkomlev.workoutdiary.repository.ConfirmationCodeRepository;
 import com.vladimirkomlev.workoutdiary.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,19 +23,19 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final MessageQueues messageQueues;
-    private final ConfirmationSecretRepository confirmationSecretRepository;
+    private final ConfirmationCodeRepository confirmationCodeRepository;
 
     @Autowired
     public UserServiceImpl(
             UserRepository userRepository,
             BCryptPasswordEncoder passwordEncoder,
             MessageQueues messageQueues,
-            ConfirmationSecretRepository confirmationSecretRepository
+            ConfirmationCodeRepository confirmationCodeRepository
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.messageQueues = messageQueues;
-        this.confirmationSecretRepository = confirmationSecretRepository;
+        this.confirmationCodeRepository = confirmationCodeRepository;
     }
 
     @Override
@@ -50,12 +50,12 @@ public class UserServiceImpl implements UserService {
     public void verifyEmail(User user) {
         User createdUser = userRepository.findByEmailIgnoreCase(user.getEmail());
         if (createdUser != null) {
-            ConfirmationSecret confirmationSecret = new ConfirmationSecret(user);
-            confirmationSecretRepository.save(confirmationSecret);
+            ConfirmationCode confirmationCode = new ConfirmationCode(user);
+            confirmationCodeRepository.save(confirmationCode);
             EmailMessage message = new EmailMessage();
             message.setRecipient(user.getEmail());
             message.setSubject("Confirm your account");
-            message.setMessage("Your confirmation secret is: " + confirmationSecret.getSecret());
+            message.setMessage("Your confirmation code is: " + confirmationCode.getCode());
             messageQueues.enqueueEmail(message);
         } else {
             throw new NotFoundException("User is not created");
@@ -63,15 +63,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User confirm(String secret) {
-        ConfirmationSecret confirmationSecret = confirmationSecretRepository.findBySecret(secret);
-        if (confirmationSecret != null) {
-            User user = userRepository.findByEmailIgnoreCase(confirmationSecret.getUser().getEmail());
+    public User confirm(String code) {
+        ConfirmationCode confirmationCode = confirmationCodeRepository.findByCode(code);
+        if (confirmationCode != null) {
+            User user = userRepository.findByEmailIgnoreCase(confirmationCode.getUser().getEmail());
             user.setEnabled(true);
-            confirmationSecretRepository.delete(confirmationSecret);
+            confirmationCodeRepository.delete(confirmationCode);
             return userRepository.save(user);
         } else {
-            throw new NotFoundException("Secret not found");
+            throw new NotFoundException("Code not found");
         }
     }
 
@@ -79,12 +79,12 @@ public class UserServiceImpl implements UserService {
     public void resetPassword(ResetPasswordRequestDto resetPasswordRequestDto) {
         User user = userRepository.findByEmailIgnoreCase(resetPasswordRequestDto.getEmail());
         if (user != null) {
-            ConfirmationSecret confirmationSecret = new ConfirmationSecret(user);
-            confirmationSecretRepository.save(confirmationSecret);
+            ConfirmationCode confirmationCode = new ConfirmationCode(user);
+            confirmationCodeRepository.save(confirmationCode);
             EmailMessage message = new EmailMessage();
             message.setRecipient(user.getEmail());
             message.setSubject("Reset password");
-            message.setMessage("Your reset password secret is: " + confirmationSecret.getSecret());
+            message.setMessage("Your reset password code is: " + confirmationCode.getCode());
             messageQueues.enqueueEmail(message);
         } else {
             throw new NotFoundException("User not found");
@@ -93,14 +93,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void setupPassword(SetupPasswordRequestDto setupPasswordRequestDto) {
-        ConfirmationSecret confirmationSecret = confirmationSecretRepository.findBySecret(setupPasswordRequestDto.getSecret());
-        if (confirmationSecret != null) {
-            User user = userRepository.findByEmailIgnoreCase(confirmationSecret.getUser().getEmail());
+        ConfirmationCode confirmationCode = confirmationCodeRepository.findByCode(setupPasswordRequestDto.getCode());
+        if (confirmationCode != null) {
+            User user = userRepository.findByEmailIgnoreCase(confirmationCode.getUser().getEmail());
             user.setPassword(passwordEncoder.encode(setupPasswordRequestDto.getPassword()));
-            confirmationSecretRepository.delete(confirmationSecret);
+            confirmationCodeRepository.delete(confirmationCode);
             userRepository.save(user);
         } else {
-            throw new NotFoundException("Secret not found");
+            throw new NotFoundException("Code not found");
         }
 
     }

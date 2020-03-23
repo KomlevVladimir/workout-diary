@@ -56,7 +56,7 @@ public class PasswordControllerUnitTest {
     public void setupPassword() throws Exception {
         SetupPasswordRequestDto request = new SetupPasswordRequestDto();
         request.setPassword("Password!1");
-        request.setSecret("secret");
+        request.setCode("code");
 
         mockMvc.perform(post("/setup-password")
                 .contentType(APPLICATION_JSON)
@@ -69,7 +69,7 @@ public class PasswordControllerUnitTest {
     @Test
     public void setupPasswordWithBlankPassword() throws Exception {
         SetupPasswordRequestDto request = new SetupPasswordRequestDto();
-        request.setSecret("secret");
+        request.setCode("code");
 
         mockMvc.perform(post("/setup-password")
                 .contentType(APPLICATION_JSON)
@@ -79,7 +79,7 @@ public class PasswordControllerUnitTest {
     }
 
     @Test
-    public void setupPasswordWithBlankSecret() throws Exception {
+    public void setupPasswordWithBlankCode() throws Exception {
         SetupPasswordRequestDto request = new SetupPasswordRequestDto();
         request.setPassword("Password!1");
 

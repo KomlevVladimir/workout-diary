@@ -5,16 +5,16 @@ import com.vladimirkomlev.workoutdiary.validation.Password;
 
 public class SetupPasswordRequestDto {
     @NotBlankField
-    private String secret;
+    private String code;
     @Password
     private String password;
 
-    public String getSecret() {
-        return secret;
+    public String getCode() {
+        return code;
     }
 
-    public void setSecret(String secret) {
-        this.secret = secret;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getPassword() {

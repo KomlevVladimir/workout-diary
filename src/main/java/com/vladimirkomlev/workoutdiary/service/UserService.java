@@ -12,7 +12,7 @@ public interface UserService {
 
     void verifyEmail(User user);
 
-    User confirm(String secret);
+    User confirm(String code);
 
     void resetPassword(ResetPasswordRequestDto resetPasswordRequestDto);
 

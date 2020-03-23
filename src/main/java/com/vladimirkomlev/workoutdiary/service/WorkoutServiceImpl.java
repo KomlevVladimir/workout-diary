@@ -29,7 +29,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     public List<Workout> getAllWorkoutsByUserId(Long userId) {
         User currentUser = userService.getCurrentUser();
         if (currentUser.getId().equals(userId)) {
-            return workoutRepository.findAll()
+            return workoutRepository.findAllByOrderByIdDesc()
                     .stream()
                     .filter(workout -> workout.getUser().getId().equals(userId))
                     .collect(Collectors.toList());

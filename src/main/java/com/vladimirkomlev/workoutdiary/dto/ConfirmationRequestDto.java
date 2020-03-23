@@ -4,13 +4,13 @@ import com.vladimirkomlev.workoutdiary.validation.NotBlankField;
 
 public class ConfirmationRequestDto {
     @NotBlankField
-    private String secret;
+    private String code;
 
-    public String getSecret() {
-        return secret;
+    public String getCode() {
+        return code;
     }
 
-    public void setSecret(String secret) {
-        this.secret = secret;
+    public void setCode(String code) {
+        this.code = code;
     }
 }

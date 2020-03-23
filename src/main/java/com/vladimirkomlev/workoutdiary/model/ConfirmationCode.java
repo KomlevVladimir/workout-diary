@@ -1,26 +1,28 @@
 package com.vladimirkomlev.workoutdiary.model;
 
 import javax.persistence.*;
-import java.util.UUID;
+import java.util.Random;
 
 @Entity
-@Table(name = "confirmation_secrets")
-public class ConfirmationSecret {
+@Table(name = "confirmation_codes")
+public class ConfirmationCode {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(name = "secret")
-    private String secret;
+    @Column(name = "code")
+    private String code;
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "user_id")
     private User user;
 
-    public ConfirmationSecret() {
+    public ConfirmationCode() {
     }
 
-    public ConfirmationSecret(User user) {
+    public ConfirmationCode(User user) {
         this.user = user;
-        secret = UUID.randomUUID().toString();
+        Random rnd = new Random();
+        int number = rnd.nextInt(999999);
+        code = String.format("%06d", number);
     }
 
     public long getId() {
@@ -31,12 +33,12 @@ public class ConfirmationSecret {
         this.id = id;
     }
 
-    public String getSecret() {
-        return secret;
+    public String getCode() {
+        return code;
     }
 
-    public void setSecret(String secret) {
-        this.secret = secret;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public User getUser() {

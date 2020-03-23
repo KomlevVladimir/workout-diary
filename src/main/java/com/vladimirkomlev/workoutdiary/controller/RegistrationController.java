@@ -31,7 +31,7 @@ public class RegistrationController {
 
     @PostMapping(value = "confirm")
     public ResponseEntity confirm(@Valid @RequestBody ConfirmationRequestDto confirmationRequestDto) {
-        User user = userService.confirm(confirmationRequestDto.getSecret());
+        User user = userService.confirm(confirmationRequestDto.getCode());
         UserResponseDto response = UserResponseDto.toUserResponseDto(user);
         return ResponseEntity.ok(response);
     }

@@ -250,7 +250,7 @@ public class WorkoutServiceUnitTest {
         mockCurrentUser.setId(currentUserId);
         when(userService.getCurrentUser()).thenReturn(mockCurrentUser);
         Workout mockWorkout = new Workout(workoutId, date, title, description, mockCurrentUser);
-        when(workoutRepository.findAll()).thenReturn(Collections.singletonList(mockWorkout));
+        when(workoutRepository.findAllByOrderByIdDesc()).thenReturn(Collections.singletonList(mockWorkout));
         List<Workout> workouts = workoutService.getAllWorkoutsByUserId(currentUserId);
 
         assertThat(workouts.get(0).getId(), equalTo(workoutId));
@@ -259,7 +259,7 @@ public class WorkoutServiceUnitTest {
         assertThat(workouts.get(0).getUser(), equalTo(mockCurrentUser));
         assertThat(workouts.get(0).getTitle(), equalTo(title));
         verify(userService, times(1)).getCurrentUser();
-        verify(workoutRepository, times(1)).findAll();
+        verify(workoutRepository, times(1)).findAllByOrderByIdDesc();
     }
 
     @Test
@@ -272,7 +272,7 @@ public class WorkoutServiceUnitTest {
         mockCurrentUser.setId(300L);
         when(userService.getCurrentUser()).thenReturn(mockCurrentUser);
         Workout mockWorkout = new Workout(workoutId, date, title, description, mockCurrentUser);
-        when(workoutRepository.findAll()).thenReturn(Collections.singletonList(mockWorkout));
+        when(workoutRepository.findAllByOrderByIdDesc()).thenReturn(Collections.singletonList(mockWorkout));
 
         exceptionRule.expect(AccessDeniedException.class);
         exceptionRule.expectMessage("Access denied");

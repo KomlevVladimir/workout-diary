@@ -51,10 +51,10 @@ public class PasswordControllerIntegrationTest {
     }
 
     @Test
-    @Sql(value = "/create-confirmation-secret-before.sql", executionPhase = BEFORE_TEST_METHOD)
+    @Sql(value = "/create-confirmation-code-before.sql", executionPhase = BEFORE_TEST_METHOD)
     public void setupPassword() {
         SetupPasswordRequestDto request = new SetupPasswordRequestDto();
-        request.setSecret("secret");
+        request.setCode("code");
         request.setPassword("NewPassword!1");
 
         ResponseEntity response = passwordController.setupPassword(request);
@@ -63,14 +63,14 @@ public class PasswordControllerIntegrationTest {
     }
 
     @Test
-    @Sql(value = "/create-confirmation-secret-before.sql", executionPhase = BEFORE_TEST_METHOD)
-    public void setupPasswordWithNonExistentSecret() {
+    @Sql(value = "/create-confirmation-code-before.sql", executionPhase = BEFORE_TEST_METHOD)
+    public void setupPasswordWithNonExistentCode() {
         SetupPasswordRequestDto request = new SetupPasswordRequestDto();
-        request.setSecret("12345");
+        request.setCode("12345");
         request.setPassword("Password!1");
 
         exceptionRule.expect(NotFoundException.class);
-        exceptionRule.expectMessage("Secret not found");
+        exceptionRule.expectMessage("Code not found");
         passwordController.setupPassword(request);
     }
 }

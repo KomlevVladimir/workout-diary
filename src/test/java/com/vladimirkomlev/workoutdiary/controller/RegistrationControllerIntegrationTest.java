@@ -68,10 +68,10 @@ public class RegistrationControllerIntegrationTest {
     }
 
     @Test
-    @Sql(value = "/create-confirmation-secret-before.sql", executionPhase = BEFORE_TEST_METHOD)
+    @Sql(value = "/create-confirmation-code-before.sql", executionPhase = BEFORE_TEST_METHOD)
     public void confirm() {
         ConfirmationRequestDto confirmationReques = new ConfirmationRequestDto();
-        confirmationReques.setSecret("secret");
+        confirmationReques.setCode("code");
         ResponseEntity response = registrationController.confirm(confirmationReques);
         UserResponseDto responseBody = (UserResponseDto) response.getBody();
 
@@ -84,11 +84,11 @@ public class RegistrationControllerIntegrationTest {
     }
 
     @Test
-    public void confirmWithNonExistentSecret() {
+    public void confirmWithNonExistentCode() {
         exceptionRule.expect(NotFoundException.class);
-        exceptionRule.expectMessage("Secret not found");
+        exceptionRule.expectMessage("Code not found");
         ConfirmationRequestDto confirmationReques = new ConfirmationRequestDto();
-        confirmationReques.setSecret("qwerty");
+        confirmationReques.setCode("qwerty");
         registrationController.confirm(confirmationReques);
     }
 }

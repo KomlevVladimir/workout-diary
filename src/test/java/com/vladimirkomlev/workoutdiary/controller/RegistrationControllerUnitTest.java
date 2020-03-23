@@ -252,13 +252,12 @@ public class RegistrationControllerUnitTest {
     public void confirm() throws Exception {
         String firstName = "John";
         String lastName = "Doe";
-        String secret = "secret";
         User mockUser = new User();
         mockUser.setFirstName(firstName);
         mockUser.setLastName(lastName);
         when(userService.confirm(anyString())).thenReturn(mockUser);
         ConfirmationRequestDto request = new ConfirmationRequestDto();
-        request.setSecret("secret");
+        request.setCode("code");
         UserResponseDto response = new UserResponseDto();
         response.setFirstName(firstName);
         response.setLastName(lastName);

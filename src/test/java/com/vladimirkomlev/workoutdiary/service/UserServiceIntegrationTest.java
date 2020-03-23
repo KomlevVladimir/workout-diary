@@ -38,9 +38,9 @@ public class UserServiceIntegrationTest {
     }
 
     @Test
-    @Sql(value = "/create-confirmation-secret-before.sql", executionPhase = BEFORE_TEST_METHOD)
+    @Sql(value = "/create-confirmation-code-before.sql", executionPhase = BEFORE_TEST_METHOD)
     public void confirm() {
-        User user = userService.confirm("secret");
+        User user = userService.confirm("code");
 
         assertNotNull(user);
         assertTrue(user.isEnabled());
