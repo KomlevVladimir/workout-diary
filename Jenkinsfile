@@ -4,7 +4,7 @@ pipeline {
         image 'komlevvladimir/workout-diary-backend-integration-tests'
         args '-u 0:0 --network host'
         alwaysPull true
-        registryUrl 'https://docker.io/'
+        registryUrl 'https://hub.docker.com/'
         registryCredentialsId '384551f5-8107-49c1-a749-827bfe18f7cc'
         }
     }
