@@ -12,19 +12,14 @@ pipeline {
             steps {
                 sh "mv /tests ."
                 sh "cd tests"
-                sh "pwd"
-                sh "ls -la"
-                sh "cd gradle"
-                sh "pwd"
-                sh "ls -la"
-                sleep(100)
+                sh "ls -la tests"
             }
         }
     }
 
-    post {
-            always {
-                cleanWs()
-            }
-        }
+//     post {
+//             always {
+//                 cleanWs()
+//             }
+//         }
 }
