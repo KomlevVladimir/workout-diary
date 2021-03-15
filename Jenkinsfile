@@ -11,14 +11,18 @@ pipeline {
         stage('Test') {
             steps {
                 sh "mv /tests ."
-                sh "cd tests && ./gradlew clean test -i --no-daemon"
+                sh "cd tests"
+                sh "pwd"
+                sh "ls -la"
+                sh "cat Dockerfile"
+                sleep(100)
             }
         }
     }
-//
-//     post {
-//             always {
-//                 cleanWs()
-//             }
-//         }
+
+    post {
+            always {
+                cleanWs()
+            }
+        }
 }
