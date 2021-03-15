@@ -14,10 +14,9 @@ pipeline {
                 sh "cd tests"
                 sh "pwd"
                 sh "ls -la"
-                sh "cd tests"
+                sh "cd gradle"
                 sh "pwd"
                 sh "ls -la"
-                sh "cat Dockerfile"
                 sleep(100)
             }
         }
