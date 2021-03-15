@@ -10,17 +10,15 @@ pipeline {
     stages {
         stage('Test') {
             steps {
-                sh "mv -f /tests ."
+                sh "mv /tests ."
                 sh "cd tests && ./gradlew clean test -i --no-daemon"
-
-//                 sh "./gradlew clean test -i --no-daemon"
             }
         }
     }
-
-    post {
-            always {
-                cleanWs()
-            }
-        }
+//
+//     post {
+//             always {
+//                 cleanWs()
+//             }
+//         }
 }
