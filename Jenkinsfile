@@ -16,7 +16,7 @@ pipeline {
             steps {
                 sh "ls -la"
                 sh "cat docker-compose.yml"
-                sh "./gradlew clean test -i --no-daemon"
+//                 sh "./gradlew clean test -i --no-daemon"
             }
         }
     }
