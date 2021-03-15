@@ -11,10 +11,8 @@ pipeline {
         stage('Test') {
             steps {
                 sh "mv -f /tests ."
-                sh "cd tests"
-                sh "ls -la"
-                sh "cat docker-compose.yml"
-                sh "docker ps -a"
+                sh "cd tests && ./gradlew clean test -i --no-daemon"
+
 //                 sh "./gradlew clean test -i --no-daemon"
             }
         }
