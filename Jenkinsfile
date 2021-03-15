@@ -12,15 +12,16 @@ pipeline {
             steps {
                 sh "mv /tests ."
                 dir("tests") {
-                    sh "./gradlew clean tests -i --no-daemon"
+//                     sh "./gradlew clean tests -i --no-daemon"
+                    sleep(600)
                 }
 
             }
         }
     }
-    post {
-            always {
-                cleanWs()
-            }
-        }
+//     post {
+//             always {
+//                 cleanWs()
+//             }
+//         }
 }
