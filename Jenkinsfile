@@ -14,6 +14,7 @@ pipeline {
     stages {
         stage('Test') {
             steps {
+                sh "ls -la"
                 sh "./gradlew clean test -i --no-daemon"
             }
         }
