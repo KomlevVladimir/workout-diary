@@ -8,9 +8,6 @@ pipeline {
 //         registryCredentialsId '384551f5-8107-49c1-a749-827bfe18f7cc'
         }
     }
-    environment {
-    HOME="/tests"
-    }
     stages {
         stage('Test') {
             steps {
@@ -19,6 +16,7 @@ pipeline {
                 sh "mv -f /tests ."
                 sh "cd tests"
                 sh "ls -la"
+                sh "cat docker-compose.yml"
 //                 sh "./gradlew clean test -i --no-daemon"
             }
         }
