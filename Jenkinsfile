@@ -11,15 +11,17 @@ pipeline {
         stage('Test') {
             steps {
                 sh "mv /tests ."
-                sh "cd tests"
-                sh "ls -la tests"
+                dir("tests") {
+                    sh "pwd"
+                }
+
             }
         }
     }
 
-//     post {
-//             always {
-//                 cleanWs()
-//             }
-//         }
+    post {
+            always {
+                cleanWs()
+            }
+        }
 }
