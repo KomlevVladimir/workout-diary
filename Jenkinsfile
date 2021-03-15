@@ -12,13 +12,12 @@ pipeline {
             steps {
                 sh "mv /tests ."
                 dir("tests") {
-                    sh "pwd"
+                    sh "./gradlew clean tests -i --no-daemon"
                 }
 
             }
         }
     }
-
     post {
             always {
                 cleanWs()
