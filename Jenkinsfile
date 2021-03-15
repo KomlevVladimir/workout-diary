@@ -15,6 +15,7 @@ pipeline {
         stage('Test') {
             steps {
                 sh "ls -la"
+                sh "cat docker-compose.yml"
                 sh "./gradlew clean test -i --no-daemon"
             }
         }
