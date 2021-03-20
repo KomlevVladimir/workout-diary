@@ -12,6 +12,7 @@ pipeline {
             steps {
                 sh "mv /tests ."
                 dir("tests") {
+                    sh "java -version"
                     sh "./gradlew clean test -i --no-daemon"
                 }
 
