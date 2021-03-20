@@ -14,11 +14,8 @@ pipeline {
                 sh "mv /tests ."
                 dir("tests") {
                     sh "java -version"
-                    sleep(200)
                     sh "./gradlew clean test -i --no-daemon"
-
                 }
-
             }
         }
     }
