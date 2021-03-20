@@ -10,6 +10,7 @@ pipeline {
     stages {
         stage('Test') {
             steps {
+                sh "java -version"
                 sh "mv /tests ."
                 dir("tests") {
                     sh "java -version"
