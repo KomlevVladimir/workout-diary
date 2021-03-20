@@ -12,8 +12,7 @@ pipeline {
             steps {
                 sh "mv /tests ."
                 dir("tests") {
-//                     sh "./gradlew clean tests -i --no-daemon"
-                    sleep(600)
+                    sh "./gradlew clean tests -i --no-daemon"
                 }
 
             }
