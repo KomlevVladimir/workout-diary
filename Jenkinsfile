@@ -20,7 +20,7 @@ pipeline {
             steps {
                 script {
                     dir("workout-diary-backend") {
-                        git url: "https://$gitRepo", branch: 'jenkinsfile', credentialsId: githubCredentialsId
+                        git url: "https://$gitRepo", branch: 'master', credentialsId: githubCredentialsId
 
                         def commitHash = sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
                         version = "${getDateTime()}-$commitHash"
