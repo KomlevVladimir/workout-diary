@@ -19,30 +19,32 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    git url: "https://$gitRepo", branch: 'jenkinsfile', credentialsId: githubCredentialsId
+                    dir("workout-diary-backend") {
+                        git url: "https://$gitRepo", branch: 'jenkinsfile', credentialsId: githubCredentialsId
 
-                    def commitHash = sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
-                    version = "${getDateTime()}-$commitHash"
+                        def commitHash = sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
+                        version = "${getDateTime()}-$commitHash"
 
-                    sh 'chmod +x gradlew && ./gradlew clean build --no-daemon'
+                        sh 'chmod +x gradlew && ./gradlew clean build --no-daemon'
 
-                    withCredentials([usernamePassword(credentialsId: githubCredentialsId,
-                            passwordVariable: 'GITHUB_PASSWORD', usernameVariable: 'GITHUB_USERNAME')]) {
-                        sh("docker login $registryName -u '$GITHUB_USERNAME' -p '$GITHUB_PASSWORD'")
-                    }
+                        withCredentials([usernamePassword(credentialsId: githubCredentialsId,
+                                passwordVariable: 'GITHUB_PASSWORD', usernameVariable: 'GITHUB_USERNAME')]) {
+                            sh("docker login $registryName -u '$GITHUB_USERNAME' -p '$GITHUB_PASSWORD'")
+                        }
 
-                    sh "docker rmi -f \$(docker images '*/$imageName:latest' -q) || true"
+                        sh "docker rmi -f \$(docker images '*/$imageName:latest' -q) || true"
 
-                    docker.withRegistry("https://$registryName") {
-                        def image = docker.build(imageName)
-                        image.push(version)
-                        image.push('latest')
+                        docker.withRegistry("https://$registryName") {
+                            def image = docker.build(imageName)
+                            image.push(version)
+                            image.push('latest')
+                        }
                     }
                 }
             }
         }
 
-        stage('Tests') {
+        stage('Integration tests') {
             agent {
                 docker {
                     image 'komlevvladimir/workout-diary-backend-integration-tests'
