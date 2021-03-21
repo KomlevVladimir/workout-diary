@@ -8,7 +8,9 @@ final String registryName = 'docker.io/komlevvladimir'
 final String imageName = 'workout-diary-backend'
 String version
 
-def getDateTime = DateTimeFormatter.ofPattern("yyyyMMddHHmmss").format(ZonedDateTime.now(ZoneOffset.UTC))
+def getDateTime = {
+    DateTimeFormatter.ofPattern("yyyyMMddHHmmss").format(ZonedDateTime.now(ZoneOffset.UTC))
+}
 
 pipeline {
     agent any
