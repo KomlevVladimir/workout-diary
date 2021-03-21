@@ -27,7 +27,7 @@ public class ConfirmationCodeRepositoryIntegrationTest {
     @Test
     public void findByCode() {
         User user = new User();
-        user.setEmail("test@myemail.com");
+        user.setEmail("test1@myemail.com");
         user.setFirstName("John");
         user.setLastName("Doe");
         user.setPassword("Password!1");

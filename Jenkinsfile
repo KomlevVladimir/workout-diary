@@ -52,7 +52,6 @@ pipeline {
                 }
             }
             steps {
-                sleep(100)
                 sh "mv /tests ."
                 dir("tests") {
                     script {
