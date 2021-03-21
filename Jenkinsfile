@@ -18,7 +18,7 @@ pipeline {
                         try {
                             sh "./gradlew clean test -i --no-daemon"
                         } finally {
-                            stash name: 'allure-results', includes: 'build/allure-results/*'
+                            allure results: [[path: 'build/allure-results']]
 
                         }
                     }
@@ -28,8 +28,6 @@ pipeline {
     }
     post {
             always {
-                unstash 'allure-results'
-                allure results: [[path: 'build/allure-results']]
                 cleanWs()
             }
         }
