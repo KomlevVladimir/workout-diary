@@ -55,12 +55,14 @@ pipeline {
             }
             steps {
                 script {
-                    sh "mv /tests ."
-                    dir("tests") {
-                        try {
-                            sh "./gradlew clean test -i --no-daemon"
-                        } finally {
-                            allure results: [[path: 'build/allure-results']]
+                    dir("workout-diary-backend") {
+                        sh "mv /tests ."
+                        dir("tests") {
+                            try {
+                                sh "./gradlew clean test -i --no-daemon"
+                            } finally {
+                                allure results: [[path: 'build/allure-results']]
+                            }
                         }
                     }
                 }
@@ -71,9 +73,6 @@ pipeline {
     post {
         always {
             cleanWs()
-            dir("tests") {
-                deleteDir()
-            }
         }
     }
 }
