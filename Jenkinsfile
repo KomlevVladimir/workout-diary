@@ -27,10 +27,10 @@ pipeline {
         }
     }
     post {
-        always {
-            unstash 'allure-results'
-            allure results: [[path: 'build/allure-results']]
-            cleanWs()
+            always {
+                unstash 'allure-results'
+                allure results: [[path: 'build/allure-results']]
+                cleanWs()
+            }
         }
-    }
 }
