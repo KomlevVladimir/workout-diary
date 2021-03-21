@@ -24,7 +24,7 @@ pipeline {
                     def commitHash = sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
                     version = "${getDateTime()}-$commitHash"
 
-                    sh 'chmod +x gradlew && ./gradlew clean build -i --no-daemon'
+                    sh 'chmod +x gradlew && ./gradlew clean build --no-daemon'
 
                     withCredentials([usernamePassword(credentialsId: githubCredentialsId,
                             passwordVariable: 'GITHUB_PASSWORD', usernameVariable: 'GITHUB_USERNAME')]) {
@@ -69,6 +69,9 @@ pipeline {
     post {
         always {
             cleanWs()
+            dir("tests") {
+                deleteDir()
+            }
         }
     }
 }
