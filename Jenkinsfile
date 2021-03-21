@@ -1,16 +1,16 @@
 pipeline {
-    agent any
+
 
     stages {
         stage('Integration tests') {
             agent {
-                docker {
+                    docker {
                     image 'komlevvladimir/workout-diary-backend-integration-tests'
                     args '-u 0:0 --network host'
                     alwaysPull true
                     registryUrl 'https://docker.io/'
+                    }
                 }
-            }
             steps
                 sh "mv /tests ."
                 dir("tests") {
@@ -19,6 +19,7 @@ pipeline {
                             sh "./gradlew clean test -i --no-daemon"
                         } finally {
                             stash name: 'allure-results', includes: 'build/allure-results/*'
+
                         }
                     }
                 }
