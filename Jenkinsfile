@@ -52,8 +52,8 @@ pipeline {
                 }
             }
             steps {
-                sh "pwd"
-                sh "mv -f /tests ."
+                sleep(100)
+                sh "mv /tests ."
                 dir("tests") {
                     script {
                         try {
