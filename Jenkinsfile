@@ -13,8 +13,11 @@ pipeline {
                 sh "java -version"
                 sh "mv /tests ."
                 dir("tests") {
-                    sh "java -version"
-                    sh "./gradlew clean test -i --no-daemon"
+                    try {
+                        sh "./gradlew clean test -i --no-daemon"
+                    } finally {
+                        allure includeProperties: false, jdk: '', results: [[path: 'build/allure-results']]
+                    }
                 }
             }
         }
