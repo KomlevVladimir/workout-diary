@@ -18,8 +18,8 @@ pipeline {
                         try {
                             sh "./gradlew clean test -i --no-daemon"
                         } finally {
-                            allure results: [[path: 'build/allure-results']]
-
+                            sleep(300)
+                           allure includeProperties: false, jdk: '', results: [[path: 'build/allure-results']]
                         }
                     }
                 }
