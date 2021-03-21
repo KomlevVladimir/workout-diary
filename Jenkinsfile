@@ -16,33 +16,33 @@ pipeline {
     agent any
 
     stages {
-//        stage('Build') {
-//            steps {
-//                script {
-//                    git url: "https://$gitRepo", branch: 'jenkinsfile', credentialsId: githubCredentialsId
-//
-//                    def commitHash = sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
-//                    version = "${getDateTime()}-$commitHash"
-//
-//                    sh 'chmod +x gradlew && ./gradlew clean build -x test --no-daemon'
-//
-//                    withCredentials([usernamePassword(credentialsId: githubCredentialsId,
-//                            passwordVariable: 'GITHUB_PASSWORD', usernameVariable: 'GITHUB_USERNAME')]) {
-//                        sh("docker login $registryName -u '$GITHUB_USERNAME' -p '$GITHUB_PASSWORD'")
-//                    }
-//
-//                    sh "docker rmi -f \$(docker images '*/$imageName:latest' -q) || true"
-//
-//                    docker.withRegistry("https://$registryName") {
-//                        def image = docker.build(imageName)
-//                        image.push(version)
-//                        image.push('latest')
-//                    }
-//                }
-//            }
-//        }
+        stage('Build') {
+            steps {
+                script {
+                    git url: "https://$gitRepo", branch: 'jenkinsfile', credentialsId: githubCredentialsId
 
-        stage('Integration tests') {
+                    def commitHash = sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
+                    version = "${getDateTime()}-$commitHash"
+
+                    sh 'chmod +x gradlew && ./gradlew clean build --no-daemon'
+
+                    withCredentials([usernamePassword(credentialsId: githubCredentialsId,
+                            passwordVariable: 'GITHUB_PASSWORD', usernameVariable: 'GITHUB_USERNAME')]) {
+                        sh("docker login $registryName -u '$GITHUB_USERNAME' -p '$GITHUB_PASSWORD'")
+                    }
+
+                    sh "docker rmi -f \$(docker images '*/$imageName:latest' -q) || true"
+
+                    docker.withRegistry("https://$registryName") {
+                        def image = docker.build(imageName)
+                        image.push(version)
+                        image.push('latest')
+                    }
+                }
+            }
+        }
+
+        stage('Tests') {
             agent {
                 docker {
                     image 'komlevvladimir/workout-diary-backend-integration-tests'
