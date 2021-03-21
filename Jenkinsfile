@@ -3,7 +3,7 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 final String gitRepo = 'github.com/KomlevVladimir/workout-diary-backend.git'
-final String githubCredentialsId = 'github credentials'
+final String githubCredentialsId = '1c810b6d-6a5e-431a-952b-1d0dfd740fa5'
 final String registryName = 'docker.io/komlevvladimir'
 final String imageName = 'workout-diary-backend'
 String version
