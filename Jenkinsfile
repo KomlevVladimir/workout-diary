@@ -1,5 +1,5 @@
 import java.time.ZoneOffset
-import java.time.ZoneDateTime
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 final String gitRepo = 'github.com/KomlevVladimir/workout-diary-backend.git'
@@ -8,9 +8,7 @@ final String registryName = 'docker.io/komlevvladimir'
 final String imageName = 'workout-diary-backend'
 String version
 
-def getDateTime = {
-    DateTimeFormatter.ofPattern("yyyyMMddHHmmss").format(ZoneDateTime.now(ZoneOffset.UTC))
-}
+def getDateTime = DateTimeFormatter.ofPattern("yyyyMMddHHmmss").format(ZonedDateTime.now(ZoneOffset.UTC))
 
 pipeline {
     agent any
@@ -29,7 +27,7 @@ pipeline {
                         sh 'chmod +x gradlew && ./gradlew clean build --no-daemon'
 
                         withCredentials([usernamePassword(credentialsId: githubCredentialsId,
-                            passwordVariable: 'GITHUB_PASSWORD', usernameVariable: 'GITHUB_USERNAME')]) {
+                                passwordVariable: 'GITHUB_PASSWORD', usernameVariable: 'GITHUB_USERNAME')]) {
                             sh("docker login $registryName -u '$GITHUB_USERNAME' -p '$GITHUB_PASSWORD'")
                         }
 
@@ -48,10 +46,10 @@ pipeline {
         stage('Integration tests') {
             agent {
                 docker {
-                image 'komlevvladimir/workout-diary-backend-integration-tests'
-                args '-u 0:0 --network host'
-                alwaysPull true
-                registryUrl 'https://docker.io/'
+                    image 'komlevvladimir/workout-diary-backend-integration-tests'
+                    args '-u 0:0 --network host'
+                    alwaysPull true
+                    registryUrl 'https://docker.io/'
                 }
             }
             steps {
@@ -61,7 +59,7 @@ pipeline {
                         try {
                             sh "./gradlew clean test -i --no-daemon"
                         } finally {
-                           allure results: [[path: 'build/allure-results']]
+                            allure results: [[path: 'build/allure-results']]
                         }
                     }
                 }
