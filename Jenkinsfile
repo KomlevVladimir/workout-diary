@@ -60,6 +60,7 @@ pipeline {
                             sh "./gradlew clean test -i --no-daemon"
                         } finally {
                             allure results: [[path: 'build/allure-results']]
+                            cleanWs()
                         }
                     }
                 }
