@@ -24,7 +24,7 @@ pipeline {
                     def commitHash = sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
                     version = "${getDateTime()}-$commitHash"
 
-                    sh 'chmod +x gradlew && ./gradlew clean build --no-daemon'
+                    sh 'chmod +x gradlew && ./gradlew clean build -i --no-daemon'
 
                     withCredentials([usernamePassword(credentialsId: githubCredentialsId,
                             passwordVariable: 'GITHUB_PASSWORD', usernameVariable: 'GITHUB_USERNAME')]) {
@@ -52,9 +52,9 @@ pipeline {
                 }
             }
             steps {
-                sh "mv /tests ."
-                dir("tests") {
-                    script {
+                script {
+                    sh "mv /tests ."
+                    dir("tests") {
                         try {
                             sh "./gradlew clean test -i --no-daemon"
                         } finally {
