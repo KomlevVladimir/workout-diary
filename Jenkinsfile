@@ -7,6 +7,11 @@ pipeline {
         registryUrl 'https://docker.io/'
         }
     }
+
+    environment {
+            ALLURE_PATH="/home/jenkins/tools/ru.yandex.qatools.allure.jenkins.tools.AllureCommandlineInstallation/allure/"
+        }
+
     stages {
         stage('Test') {
             steps {
@@ -17,6 +22,9 @@ pipeline {
                         try {
                             sh "./gradlew clean test -i --no-daemon"
                         } finally {
+                             sh 'mkdir -p $ALLURE_PATH'
+                             sh 'cp -r /usr/bin/ $ALLURE_PATH'
+                             sh 'chmod -R 777 allure-results'
                             allure includeProperties: false, jdk: '', results: [[path: 'build/allure-results']]
                         }
                     }
