@@ -26,14 +26,15 @@ public class UserRepositoryIntegrationTest {
 
     @Test
     public void findByEmailIgnoreCase() {
+        String email = "test2@myemail.com";
         User user = new User();
-        user.setEmail("test@myemail.com");
+        user.setEmail(email);
         user.setFirstName("John");
         user.setLastName("Doe");
         user.setPassword("Password!1");
         User savedUserInDb = entityManager.persist(user);
 
-        User foundUser = userRepository.findByEmailIgnoreCase("test@myemail.com");
+        User foundUser = userRepository.findByEmailIgnoreCase(email);
 
         assertNotNull(foundUser);
         assertThat(foundUser, equalTo(savedUserInDb));
