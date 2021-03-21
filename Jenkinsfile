@@ -48,6 +48,7 @@ pipeline {
             agent {
                 docker {
                     image 'komlevvladimir/workout-diary-backend-integration-tests'
+                    reuseNode true
                     args '-u 0:0 --network host'
                     alwaysPull true
                     registryUrl 'https://docker.io/'
@@ -55,14 +56,12 @@ pipeline {
             }
             steps {
                 script {
-                    dir("workout-diary-backend") {
-                        sh "mv /tests ."
-                        dir("tests") {
-                            try {
-                                sh "./gradlew clean test -i --no-daemon"
-                            } finally {
-                                allure results: [[path: 'build/allure-results']]
-                            }
+                    sh "mv /tests ."
+                    dir("tests") {
+                        try {
+                            sh "./gradlew clean test -i --no-daemon"
+                        } finally {
+                            allure results: [[path: 'build/allure-results']]
                         }
                     }
                 }
