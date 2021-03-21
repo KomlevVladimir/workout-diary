@@ -24,7 +24,7 @@ pipeline {
                         } finally {
                              sh 'mkdir -p $ALLURE_PATH'
                              sh 'cp -r /usr/bin/ $ALLURE_PATH'
-                             sh 'chmod -R 777 allure-results'
+                             sh 'chmod -R 777 build/allure-results'
                             allure includeProperties: false, jdk: '', results: [[path: 'build/allure-results']]
                         }
                     }
