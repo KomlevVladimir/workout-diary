@@ -1,17 +1,17 @@
 pipeline {
-
+    agent {
+        docker {
+        image 'komlevvladimir/workout-diary-backend-integration-tests'
+        args '-u 0:0 --network host'
+        alwaysPull true
+        registryUrl 'https://docker.io/'
+        }
+    }
 
     stages {
-        stage('Integration tests') {
-            agent {
-                    docker {
-                    image 'komlevvladimir/workout-diary-backend-integration-tests'
-                    args '-u 0:0 --network host'
-                    alwaysPull true
-                    registryUrl 'https://docker.io/'
-                    }
-                }
-            steps
+        stage('Test') {
+            steps {
+                sh "java -version"
                 sh "mv /tests ."
                 dir("tests") {
                     script {
@@ -19,6 +19,9 @@ pipeline {
                             sh "./gradlew clean test -i --no-daemon"
                         } finally {
                             sleep(300)
+                            sh 'mkdir -p $ALLURE_PATH'
+                            sh 'cp -r /usr/bin/ $ALLURE_PATH'
+                            sh 'chmod -R 777 build/allure-results'
                            allure includeProperties: false, jdk: '', results: [[path: 'build/allure-results']]
                         }
                     }
