@@ -22,10 +22,11 @@ pipeline {
                         try {
                             sh "./gradlew clean test -i --no-daemon"
                         } finally {
-                             sh 'mkdir -p $ALLURE_PATH'
-                             sh 'cp -r /usr/bin/ $ALLURE_PATH'
-                             sh 'chmod -R 777 build/allure-results'
-                            allure includeProperties: false, jdk: '', results: [[path: 'build/allure-results']]
+                            sleep(300)
+                            sh 'mkdir -p $ALLURE_PATH'
+                            sh 'cp -r /usr/bin/ $ALLURE_PATH'
+                            sh 'chmod -R 777 build/allure-results'
+                           allure includeProperties: false, jdk: '', results: [[path: 'build/allure-results']]
                         }
                     }
                 }
